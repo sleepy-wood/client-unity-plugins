@@ -9,7 +9,7 @@ build:
 build-sim:
 	@make -C iOS/UnityPlugin build TARGET=iphonesimulator
 	@rm -rf dist-sim && mkdir -p dist-sim/iOS
-	@cp -r iOS/UnityPlugin/*.framework dist/iOS
+	@cp -r iOS/UnityPlugin/*.framework dist-sim/iOS
 	@cp *.cs dist-sim
 
 .PHONY: push
