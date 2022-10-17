@@ -5,7 +5,7 @@ build:
 	@make -C iOS/UnityPlugin build
 	@rm -rf $(DIST) && mkdir -p $(DIST)/iOS
 	@cp -r iOS/UnityPlugin/UnityPlugin.framework dist/iOS
-	@cp UnityPlugin.cs $(DIST)
+	@cp NativePlugin.cs $(DIST)
 
 .PHONY: push
 push: build
