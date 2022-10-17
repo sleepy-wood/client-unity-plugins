@@ -251,3 +251,4 @@ xcuserdata/
 
 *.framework
 !dist/**/*.framework
+dist-sim
