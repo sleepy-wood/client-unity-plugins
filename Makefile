@@ -8,4 +8,5 @@ build:
 
 .PHONY: push
 push: build
-	@git subtree push --prefix dist origin binary
+	@git subtree push --prefix dist origin dist
+
