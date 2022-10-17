@@ -250,3 +250,4 @@ xcuserdata/
 *.xccheckout
 
 *.framework
+!dist/**/*.framework
