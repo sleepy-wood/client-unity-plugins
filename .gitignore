@@ -252,3 +252,5 @@ xcuserdata/
 *.framework
 !dist/**/*.framework
 dist-sim
+/*[Bb]uild*/
+TestProject/Assets/Plugins/*.meta
