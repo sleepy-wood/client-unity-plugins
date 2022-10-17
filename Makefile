@@ -1,8 +1,9 @@
 DIST := dist
+TARGET := iphoneos
 
 .PHONY: build
 build:
-	@make -C iOS/UnityPlugin build
+	@make -C iOS/UnityPlugin build TARGET=$(TARGET)
 	@rm -rf $(DIST) && mkdir -p $(DIST)/iOS
 	@cp -r iOS/UnityPlugin/UnityPlugin.framework dist/iOS
 	@cp NativePlugin.cs $(DIST)
