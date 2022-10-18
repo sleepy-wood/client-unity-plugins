@@ -11,7 +11,7 @@ public class NativePlugin
     private static extern bool iOS_healthDataIsAvailable();
 
     [DllImport("__Internal")]
-    private static extern bool iOS_healthDataRequestAuth();
+    private static extern void iOS_healthDataRequestAuth();
 #endif
 
     public static void RunHello()
@@ -32,12 +32,12 @@ public class NativePlugin
 #endif
     }
 
-    public static bool HealthDataRequestAuth()
+    public static void HealthDataRequestAuth()
     {
 #if UNITY_IOS
-        return iOS_healthDataRequestAuth();
+        iOS_healthDataRequestAuth();
 #else
-        return false;
+        Debug.Log("No iOS Device Found");
 #endif
     }
 }

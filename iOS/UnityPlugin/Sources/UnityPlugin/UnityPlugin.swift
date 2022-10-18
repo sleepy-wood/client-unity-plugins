@@ -11,6 +11,6 @@ func iOS_healthDataIsAvailable() -> Bool {
 }
 
 @_cdecl("iOS_healthDataRequestAuth")
-func iOS_healthDataRequestAuth() -> Bool {
+func iOS_healthDataRequestAuth() {
     return HealthData.requestAuth()
 }
