@@ -11,8 +11,8 @@ struct HealthData {
 
     static func requestAuth() {
         // TODO: Make it async using C-style callback
-        let group = DispatchGroup()
-        group.enter()
+        // let group = DispatchGroup()
+        // group.enter()
         DispatchQueue.global(qos: .userInitiated).async {
             let semaphore = DispatchSemaphore(value: 0)
             healthStore.requestAuthorization(toShare: nil, read: Set([typeToRead])) { (success, error) in
@@ -27,8 +27,8 @@ struct HealthData {
                 semaphore.signal()
             }
             semaphore.wait()
-            group.leave()
+            // group.leave()
         }
-        group.wait()
+        // group.wait()
     }
 }
