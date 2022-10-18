@@ -4,6 +4,9 @@ public class NativePluginTest : MonoBehaviour
 {
     void Start()
     {
-        NativePlugin.runHello();
+        NativePlugin.RunHello();
+        Debug.Log("DebugLog Test");
+        Debug.Log("HealthDataIsAvailable: " + NativePlugin.HealthDataIsAvailable().ToString());
+        Debug.Log("HealthDataRequestAuth: " + NativePlugin.HealthDataRequestAuth().ToString());
 	}
 }
