@@ -10,20 +10,22 @@ struct HealthData {
     }
 
     static func requestAuth() -> Bool {
-        let semaphore = DispatchSemaphore(value: 0)
-        healthStore.requestAuthorization(toShare: nil, read: Set([typeToRead])) { (success, error) in
-        // healthStore.requestAuthorization(toShare: Set([typeToRead]), read: Set([typeToRead])) { (success, error) in
-            if let error = error {
-                print("requestAuthorization error:", error.localizedDescription)
+        // let semaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.main.async {
+            healthStore.requestAuthorization(toShare: nil, read: Set([typeToRead])) { (success, error) in
+            // healthStore.requestAuthorization(toShare: Set([typeToRead]), read: Set([typeToRead])) { (success, error) in
+                if let error = error {
+                    print("requestAuthorization error:", error.localizedDescription)
+                }
+                if success {
+                    print("HealthKit authorization request was successful!")
+                } else {
+                    print("HealthKit authorization was not successful.")
+                }
+                // semaphore.signal()
             }
-            if success {
-                print("HealthKit authorization request was successful!")
-            } else {
-                print("HealthKit authorization was not successful.")
-            }
-            semaphore.signal()
         }
-        semaphore.wait()
+        // semaphore.wait()
         // no way to determine read permission (privacy concern)
         return true
         // let status = healthStore.authorizationStatus(for: typeToRead)

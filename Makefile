@@ -1,5 +1,5 @@
 DIST := dist
-DIST_TEST := TestProject/Assets/Plugins
+DIST_TEST := TestProject/Assets/Plugins/NativePlugin
 
 .PHONY: build
 build:
