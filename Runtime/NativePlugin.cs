@@ -19,7 +19,7 @@ public class NativePlugin
 #if UNITY_IOS
         iOS_runHello();
 #else
-        Debug.Log("No iOS Device Found");
+        Debug.Log("RunHello: No iOS Device Found");
 #endif
     }
 
@@ -37,7 +37,7 @@ public class NativePlugin
 #if UNITY_IOS
         iOS_healthDataRequestAuth();
 #else
-        Debug.Log("No iOS Device Found");
+        Debug.Log("HealthDataRequestAuth: No iOS Device Found");
 #endif
     }
 }

@@ -10,7 +10,11 @@ struct HealthData {
     }
 
     static func requestAuth() {
-        DispatchQueue.main.async {
+        // TODO: Make it async using C-style callback
+        let group = DispatchGroup()
+        group.enter()
+        DispatchQueue.global(qos: .userInitiated).async {
+            let semaphore = DispatchSemaphore(value: 0)
             healthStore.requestAuthorization(toShare: nil, read: Set([typeToRead])) { (success, error) in
                 if let error = error {
                     print("requestAuthorization error:", error.localizedDescription)
@@ -20,7 +24,11 @@ struct HealthData {
                 } else {
                     print("HealthKit authorization was not successful.")
                 }
+                semaphore.signal()
             }
+            semaphore.wait()
+            group.leave()
         }
+        group.wait()
     }
 }

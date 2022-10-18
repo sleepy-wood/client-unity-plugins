@@ -254,4 +254,5 @@ xcuserdata/
 dist-sim
 /*[Bb]uild*/
 TestProject/Assets/Plugins/NativePlugin/*.meta
+TestProject/Assets/Plugins/NativePlugin/Runtime/*.meta
 TestProject/Assets/Plugins/NativePlugin/Editor/*.meta
