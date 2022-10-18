@@ -20,6 +20,8 @@ public class NativePluginPostProcessBuild
             PlistElementDict rootDict = plist.root;
             // Read health data
             rootDict.SetString("NSHealthShareUsageDescription", "This app needs to access your health data to work properly.");
+            // Write health data
+            // rootDict.SetString("NSHealthUpdateUsageDescription", "This app needs to access your health data to work properly.");
             // Write to file
             File.WriteAllText(plistPath, plist.WriteToString());
             // Get project
