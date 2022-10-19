@@ -35,12 +35,13 @@ struct HealthData {
         // group.wait()
     }
 
-    static func querySleepSamples(startDateInSeconds: Double, endDateInSeconds: Double, maxNumSamples: Int, onSuccess: @escaping SuccessCallback, onError: @escaping ErrorCallback) {
+    static func querySleepSamples(startDateInSeconds: Double, endDateInSeconds: Double, maxNumSamples: Int, onSuccess: @escaping SuccessBoolCallback, onError: @escaping ErrorCallback) {
         let startDate = Date(timeIntervalSince1970: TimeInterval(startDateInSeconds))
         let endDate = Date(timeIntervalSince1970: TimeInterval(endDateInSeconds))
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
         let query = HKSampleQuery(sampleType: typeToRead, predicate: predicate, limit: maxNumSamples, sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+            var success = false
             if let error = error {
                 print("querySleepData error:", error.localizedDescription)
                 onError(error.toInteropError())
@@ -48,8 +49,9 @@ struct HealthData {
             if let samples = samples {
                 print("querySleepData samples:", samples)
                 sleepSamples = samples as! [HKCategorySample]
-                onSuccess()
+                success = true
             }
+            onSuccess(success)
         }
     }
 
@@ -57,7 +59,7 @@ struct HealthData {
         return sleepSamples.count
     }
 
-    static func getSleepSamplesIndex(index: Int) -> SleepSample {
+    static func getSleepSamplesAtIndex(index: Int) -> SleepSample {
         let sample = sleepSamples[Index(index)]
         return SleepSample(
             startDate: sample.startDate.timeIntervalSince1970,
