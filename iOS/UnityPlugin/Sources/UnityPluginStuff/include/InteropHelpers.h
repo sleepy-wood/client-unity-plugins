@@ -4,7 +4,6 @@
 typedef struct {
     int code;
     char* localizedDescription;
-    long taskId;
 } InteropError;
 
 typedef struct {

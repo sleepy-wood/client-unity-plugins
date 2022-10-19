@@ -9,8 +9,7 @@ namespace NativePluginStuff
     [StructLayout(LayoutKind.Sequential)]
     public struct AppleInteropError
     {
-        public int Code;
-        public string LocalizedDescription;
-        public string TaskId;
+        public readonly int Code;
+        public readonly string LocalizedDescription;
     }
 }

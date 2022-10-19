@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
+using NativePluginStuff;
 
 public class NativePlugin
 {
@@ -11,7 +12,7 @@ public class NativePlugin
     private static extern bool iOS_healthDataIsAvailable();
 
     [DllImport("__Internal")]
-    private static extern void iOS_healthDataRequestAuth();
+    private static extern void iOS_healthDataRequestAuth(AppleSuccessCallback<bool> onSuccess, AppleErrorCallback onError);
 #endif
 
     public static void RunHello()

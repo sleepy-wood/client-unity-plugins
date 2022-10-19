@@ -9,24 +9,26 @@ struct HealthData {
         return HKHealthStore.isHealthDataAvailable()
     }
 
-    static func requestAuth() {
+    static func requestAuth(onSuccess: @escaping SuccessBoolCallback, onError: @escaping ErrorCallback) {
         // TODO: Make it async using C-style callback
         // let group = DispatchGroup()
         // group.enter()
         DispatchQueue.global(qos: .userInitiated).async {
-            let semaphore = DispatchSemaphore(value: 0)
-            healthStore.requestAuthorization(toShare: nil, read: Set([typeToRead])) { (success, error) in
+            // let semaphore = DispatchSemaphore(value: 0)
+            healthStore.requestAuthorization(toShare: nil, read: Set([typeToRead])) { (granted, error) in
                 if let error = error {
                     print("requestAuthorization error:", error.localizedDescription)
+                    onError(error.toInteropError())
                 }
-                if success {
-                    print("HealthKit authorization request was successful!")
+                if granted {
+                    print("HealthKit authorization request was granted!")
                 } else {
-                    print("HealthKit authorization was not successful.")
+                    print("HealthKit authorization was not granted.")
                 }
-                semaphore.signal()
+                onSuccess(granted)
+                // semaphore.signal()
             }
-            semaphore.wait()
+            // semaphore.wait()
             // group.leave()
         }
         // group.wait()

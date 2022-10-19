@@ -6,6 +6,6 @@ func iOS_healthDataIsAvailable() -> Bool {
 }
 
 @_cdecl("iOS_healthDataRequestAuth")
-func iOS_healthDataRequestAuth() {
-    return HealthData.requestAuth()
+func iOS_healthDataRequestAuth(onSuccess: @escaping SuccessBoolCallback, onError: @escaping ErrorCallback) {
+    return HealthData.requestAuth(onSuccess: onSuccess, onError: onError)
 }
