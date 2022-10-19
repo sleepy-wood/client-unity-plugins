@@ -13,7 +13,7 @@ func iOS_healthDataRequestAuth(onSuccess: @escaping SuccessBoolCallback, onError
 
 @_cdecl("iOS_healthDataQuerySleepSamples")
 func iOS_healthDataQuerySleepSamples(startDateInSeconds: Double, endDateInSeconds: Double, maxNumSamples: Int, onSuccess: @escaping SuccessBoolCallback, onError: @escaping ErrorCallback) {
-    return HealthData.querySleepSamples(startDateInSeconds: startDateInSeconds, endDateInSeconds: endDateInSeconds, maxNumSamples: maxNumSamples, onSuccess: onSuccess, onError: onError)
+    HealthData.querySleepSamples(startDateInSeconds: startDateInSeconds, endDateInSeconds: endDateInSeconds, maxNumSamples: maxNumSamples, onSuccess: onSuccess, onError: onError)
 }
 
 @_cdecl("iOS_healthDataGetSleepSamplesCount")

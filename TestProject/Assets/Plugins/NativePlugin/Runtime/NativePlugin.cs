@@ -86,7 +86,7 @@ public class NativePlugin
     [MonoPInvokeCallback(typeof(AppleSuccessCallback<bool>))]
     private static void AppleOnHealthDataQuerySleepSamplesCompleted(bool success)
     {
-        Debug.Log("AppleOnHealthDataQuerySleepSamplesCompleted");
+        Debug.Log("AppleOnHealthDataQuerySleepSamplesCompleted: " + success);
         if (success)
         {
             int numSamples = iOS_healthDataGetSleepSamplesCount();

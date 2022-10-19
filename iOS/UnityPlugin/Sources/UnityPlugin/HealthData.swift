@@ -41,7 +41,7 @@ struct HealthData {
         let endDate = Date(timeIntervalSince1970: TimeInterval(endDateInSeconds))
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
-        let _ = HKSampleQuery(sampleType: typeToRead, predicate: predicate, limit: maxNumSamples, sortDescriptors: [sortDescriptor]) { (_, samples, error) in
+        let query = HKSampleQuery(sampleType: typeToRead, predicate: predicate, limit: maxNumSamples, sortDescriptors: [sortDescriptor]) { (_, samples, error) in
             var success = false
             if let error = error {
                 print("querySleepData error:", error.localizedDescription)
@@ -54,6 +54,7 @@ struct HealthData {
             }
             onSuccess(success)
         }
+        healthStore.execute(query)
     }
 
     static func getSleepSamplesCount() -> Int {
