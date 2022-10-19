@@ -10,7 +10,6 @@ struct HealthData {
     }
 
     static func requestAuth(onSuccess: @escaping SuccessBoolCallback, onError: @escaping ErrorCallback) {
-        // TODO: Make it async using C-style callback
         // let group = DispatchGroup()
         // group.enter()
         DispatchQueue.global(qos: .userInitiated).async {
