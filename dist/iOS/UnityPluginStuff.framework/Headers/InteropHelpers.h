@@ -3,12 +3,12 @@
 
 typedef struct {
     int code;
-    char * localizedDescription;
+    char* localizedDescription;
     long taskId;
 } InteropError;
 
 typedef struct {
-    void * pointer;
+    void* pointer;
     int length;
 } InteropStructArray;
 

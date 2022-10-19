@@ -1,4 +1,0 @@
-module UnityPluginStuff {
-    header "Headers/UnityPluginStuff/UnityPluginStuff.h"
-    export *
-}
