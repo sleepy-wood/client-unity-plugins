@@ -1,5 +1,6 @@
 import Foundation
 import HealthKit
+import UnityPluginStuff
 
 struct HealthData {
     private static let healthStore: HKHealthStore = HKHealthStore()
@@ -40,7 +41,7 @@ struct HealthData {
         let endDate = Date(timeIntervalSince1970: TimeInterval(endDateInSeconds))
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
-        let query = HKSampleQuery(sampleType: typeToRead, predicate: predicate, limit: maxNumSamples, sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+        let _ = HKSampleQuery(sampleType: typeToRead, predicate: predicate, limit: maxNumSamples, sortDescriptors: [sortDescriptor]) { (_, samples, error) in
             var success = false
             if let error = error {
                 print("querySleepData error:", error.localizedDescription)
@@ -60,10 +61,10 @@ struct HealthData {
     }
 
     static func getSleepSamplesAtIndex(index: Int) -> SleepSample {
-        let sample = sleepSamples[Index(index)]
+        let sample = sleepSamples[index]
         return SleepSample(
-            startDate: sample.startDate.timeIntervalSince1970,
-            endDate: sample.endDate.timeIntervalSince1970,
-            value: sample.value)
+            startDateInSeconds: sample.startDate.timeIntervalSince1970,
+            endDateInSeconds: sample.endDate.timeIntervalSince1970,
+            value: Int32(sample.value))
     }
 }

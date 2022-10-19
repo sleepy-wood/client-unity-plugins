@@ -1,4 +1,5 @@
 import Foundation
+import UnityPluginStuff
 
 @_cdecl("iOS_healthDataIsAvailable")
 func iOS_healthDataIsAvailable() -> Bool {

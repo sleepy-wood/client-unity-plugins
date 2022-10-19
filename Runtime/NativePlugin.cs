@@ -1,15 +1,16 @@
+using System;
 using System.Runtime.InteropServices;
+using AOT;
 using UnityEngine;
 using NativePluginStuff;
-using AOT;
 
 public class NativePlugin
 {
     public delegate void HealthDataRequestAuthCompletedHandler(bool granted);
     public static event HealthDataRequestAuthCompletedHandler HealthDataRequestAuthCompleted;
 
-    public delegate void HealthDataRequestSleepSamplesCompletedHandler(SleepSample[]? samples);
-    public static event HealthDataRequestSleepSamplesCompletedHandler HealthDataRequestSleepSamplesCompleted;
+    public delegate void HealthDataQuerySleepSamplesCompletedHandler(SleepSample[] samples);
+    public static event HealthDataQuerySleepSamplesCompletedHandler HealthDataQuerySleepSamplesCompleted;
 
 #if UNITY_IOS
     [DllImport("__Internal")]
@@ -52,7 +53,7 @@ public class NativePlugin
     public static void HealthDataRequestAuth()
     {
 #if UNITY_IOS
-        iOS_healthDataRequestAuth(AppleOnHealthDataRequestAuthCompleted, AppleOnHealthDataRequestAuthErrored);
+        iOS_healthDataRequestAuth(AppleOnHealthDataRequestAuthCompleted, AppleOnHealthDataRequestAuthFailed);
 #else
         Debug.Log("HealthDataRequestAuth: No iOS Device Found");
 #endif
