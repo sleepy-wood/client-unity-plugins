@@ -21,7 +21,7 @@ func iOS_healthDataGetSleepSamplesCount() -> Int {
     return HealthData.getSleepSamplesCount()
 }
 
-@_cdecl("iOS_healthDataGetSleepSamplesAtIndex")
-func iOS_healthDataGetSleepSamplesAtIndex(index: Int) -> SleepSample {
-    return HealthData.getSleepSamplesAtIndex(index: index)
+@_cdecl("iOS_healthDataGetSleepSampleAtIndex")
+func iOS_healthDataGetSleepSampleAtIndex(index: Int) -> SleepSample {
+    return HealthData.getSleepSampleAtIndex(index: index)
 }

@@ -61,7 +61,7 @@ struct HealthData {
         return sleepSamples.count
     }
 
-    static func getSleepSamplesAtIndex(index: Int) -> SleepSample {
+    static func getSleepSampleAtIndex(index: Int) -> SleepSample {
         let sample = sleepSamples[index]
         return SleepSample(
             startDateInSeconds: sample.startDate.timeIntervalSince1970,
