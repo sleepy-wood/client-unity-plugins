@@ -19,7 +19,7 @@ make push
 
 ## 2. API Usage
 
-`TestProject/Assets/Scripts/NativePluginTest.cs` 확인
+[`TestProject/Assets/Scripts/NativePluginTest.cs`](TestProject/Assets/Scripts/NativePluginTest.cs) 확인
 
 ### HealthData
 
