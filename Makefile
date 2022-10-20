@@ -17,4 +17,8 @@ build-sim:
 
 .PHONY: push
 push: build
-	@git subtree push --prefix dist origin dist
+#	@git subtree push --prefix dist origin dist
+	@echo "gitdir: $(shell pwd)/.git/worktrees/dist" > dist/.git
+	@git -C dist add .
+	@git -C dist commit -m 'feat: update'
+	@git -C dist push origin dist
