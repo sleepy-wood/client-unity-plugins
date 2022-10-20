@@ -250,7 +250,7 @@ xcuserdata/
 *.xccheckout
 
 *.framework
-!dist/**/*.framework
-dist-sim
+# !dist/**/*.framework
+dist
 /*[Bb]uild*/
 TestProject/Assets/Plugins/*
