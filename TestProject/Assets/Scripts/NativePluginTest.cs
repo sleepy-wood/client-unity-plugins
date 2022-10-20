@@ -1,25 +1,26 @@
 using System;
 using UnityEngine;
-
+using NativePlugin;
+using NativePlugin.HealthData;
 public class NativePluginTest : MonoBehaviour
 {
     void Start()
     {
-        NativePlugin.RunHello();
+        HelloTest.RunHello();
         Debug.Log("DebugLog Test");
-        Debug.Log("HealthDataIsAvailable: " + NativePlugin.HealthDataIsAvailable().ToString());
-        NativePlugin.HealthDataRequestAuthCompleted += (granted) =>
+        Debug.Log("HealthDataIsAvailable: " + HealthData.IsAvailable().ToString());
+        HealthData.RequestAuthCompleted += (granted) =>
         {
-            Debug.Log("Start:HealthDataRequestAuthCompleted: " + granted.ToString());
+            Debug.Log("Start:RequestAuthCompleted: " + granted.ToString());
             if (granted)
             {
-                NativePlugin.HealthDataQuerySleepSamplesCompleted += (samples) =>
+                HealthData.QuerySleepSamplesCompleted += (samples) =>
                 {
-                    Debug.Log("Start:HealthDataQuerySleepSamplesCompleted: " + samples.Length.ToString());
+                    Debug.Log("Start:QuerySleepSamplesCompleted: " + samples.Length.ToString());
                 };
-                NativePlugin.HealthDataQuerySleepSamples(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), DateTime.Now, 100);
+                HealthData.QuerySleepSamples(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), DateTime.Now, 100);
             }
         };
-        NativePlugin.HealthDataRequestAuth();
+        HealthData.RequestAuth();
     }
 }

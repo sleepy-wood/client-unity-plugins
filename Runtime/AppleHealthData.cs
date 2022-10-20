@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace NativePluginStuff
+namespace NativePlugin.HealthData.IOS
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct AppleSleepSample

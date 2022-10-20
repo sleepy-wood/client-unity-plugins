@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace NativePluginStuff
+namespace NativePlugin.IOS
 {
     public delegate void AppleSuccessCallback();
     public delegate void AppleSuccessCallback<T>(T response);
