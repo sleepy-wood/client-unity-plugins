@@ -83,6 +83,7 @@ namespace NativePlugin.HealthData
 #endif
         }
 
+#if UNITY_IOS
         [MonoPInvokeCallback(typeof(AppleSuccessCallback<bool>))]
         private static void AppleOnRequestAuthCompleted(bool granted)
         {
@@ -95,6 +96,7 @@ namespace NativePlugin.HealthData
         {
             // TODO: Handle error?
         }
+#endif
 
         public static void QuerySleepSamples(
             DateTime startDate,
@@ -117,6 +119,7 @@ namespace NativePlugin.HealthData
 #endif
         }
 
+#if UNITY_IOS
         [MonoPInvokeCallback(typeof(AppleSuccessCallback<bool>))]
         private static void AppleOnQuerySleepSamplesCompleted(bool success)
         {
@@ -154,6 +157,7 @@ namespace NativePlugin.HealthData
         {
             // TODO: Handle error?
         }
+#endif
 
         public static DateTime ConvertFromUnixTimestamp(double timestamp)
         {

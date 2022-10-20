@@ -1,2 +1,2 @@
-#import "HealthData.h"
-#import "InteropHelpers.h"
+#include "HealthData.h"
+#include "InteropHelpers.h"
