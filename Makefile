@@ -22,3 +22,8 @@ push: build
 	@git -C dist add .
 	@git -C dist commit -m 'feat: update'
 	@git -C dist push origin dist
+
+.PHONY: format
+format:
+	@swiftformat .
+	@dotnet csharpier .
