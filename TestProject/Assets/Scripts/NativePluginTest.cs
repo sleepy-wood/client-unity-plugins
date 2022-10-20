@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using NativePlugin;
 using NativePlugin.HealthData;
+
 public class NativePluginTest : MonoBehaviour
 {
     void Start()
@@ -18,7 +19,11 @@ public class NativePluginTest : MonoBehaviour
                 {
                     Debug.Log("Start:QuerySleepSamplesCompleted: " + samples.Length.ToString());
                 };
-                HealthData.QuerySleepSamples(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), DateTime.Now, 100);
+                HealthData.QuerySleepSamples(
+                    new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                    DateTime.Now,
+                    100
+                );
             }
         };
         HealthData.RequestAuth();

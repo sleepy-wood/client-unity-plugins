@@ -19,7 +19,10 @@ public class NativePluginPostProcessBuild
             // Get root
             PlistElementDict rootDict = plist.root;
             // Read health data
-            rootDict.SetString("NSHealthShareUsageDescription", "This app needs to access your health data to work properly.");
+            rootDict.SetString(
+                "NSHealthShareUsageDescription",
+                "This app needs to access your health data to work properly."
+            );
             // Write health data
             // rootDict.SetString("NSHealthUpdateUsageDescription", "This app needs to access your health data to work properly.");
             // Write to file
@@ -33,7 +36,12 @@ public class NativePluginPostProcessBuild
             project.AddFrameworkToProject(targetGuid, "HealthKit.framework", false);
             File.WriteAllText(projectPath, project.WriteToString());
             // Add entitlements
-            var manager = new ProjectCapabilityManager(projectPath, "Entitlements.entitlements", null, project.GetUnityMainTargetGuid());
+            var manager = new ProjectCapabilityManager(
+                projectPath,
+                "Entitlements.entitlements",
+                null,
+                project.GetUnityMainTargetGuid()
+            );
             manager.AddHealthKit();
             manager.WriteToFile();
         }

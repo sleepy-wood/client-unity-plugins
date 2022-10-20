@@ -4,6 +4,7 @@ using AOT;
 using UnityEngine;
 using NativePlugin.IOS;
 using NativePlugin.HealthData.IOS;
+
 namespace NativePlugin.HealthData
 {
     public enum SleepType : int
@@ -43,10 +44,19 @@ namespace NativePlugin.HealthData
         private static extern bool iOS_healthDataIsAvailable();
 
         [DllImport("__Internal")]
-        private static extern void iOS_healthDataRequestAuth(AppleSuccessCallback<bool> onSuccess, AppleErrorCallback onError);
+        private static extern void iOS_healthDataRequestAuth(
+            AppleSuccessCallback<bool> onSuccess,
+            AppleErrorCallback onError
+        );
 
         [DllImport("__Internal")]
-        private static extern void iOS_healthDataQuerySleepSamples(double startDateInSeconds, double endDateInSeconds, int maxNumSamples, AppleSuccessCallback<bool> onSuccess, AppleErrorCallback onError);
+        private static extern void iOS_healthDataQuerySleepSamples(
+            double startDateInSeconds,
+            double endDateInSeconds,
+            int maxNumSamples,
+            AppleSuccessCallback<bool> onSuccess,
+            AppleErrorCallback onError
+        );
 
         [DllImport("__Internal")]
         private static extern int iOS_healthDataGetSleepSamplesCount();
@@ -86,12 +96,22 @@ namespace NativePlugin.HealthData
             // TODO: Handle error?
         }
 
-        public static void QuerySleepSamples(DateTime startDate, DateTime endDate, int maxNumSamples)
+        public static void QuerySleepSamples(
+            DateTime startDate,
+            DateTime endDate,
+            int maxNumSamples
+        )
         {
             double startDateInSeconds = ConvertToUnixTimestamp(startDate);
             double endDateInSeconds = ConvertToUnixTimestamp(endDate);
 #if UNITY_IOS
-            iOS_healthDataQuerySleepSamples(startDateInSeconds, endDateInSeconds, maxNumSamples, AppleOnQuerySleepSamplesCompleted, AppleOnQuerySleepSamplesFailed);
+            iOS_healthDataQuerySleepSamples(
+                startDateInSeconds,
+                endDateInSeconds,
+                maxNumSamples,
+                AppleOnQuerySleepSamplesCompleted,
+                AppleOnQuerySleepSamplesFailed
+            );
 #else
             Debug.Log("QuerySleepSamples: Unsupported Platform");
 #endif
@@ -111,7 +131,14 @@ namespace NativePlugin.HealthData
                     DateTime startDate = ConvertFromUnixTimestamp(sample.startDateInSeconds);
                     DateTime endDate = ConvertFromUnixTimestamp(sample.endDateInSeconds);
                     SleepType type = (SleepType)sample.value;
-                    Debug.Log("AppleOnQuerySleepSamplesCompleted: " + startDate + " - " + endDate + " - " + type);
+                    Debug.Log(
+                        "AppleOnQuerySleepSamplesCompleted: "
+                            + startDate
+                            + " - "
+                            + endDate
+                            + " - "
+                            + type
+                    );
                     res[i] = new SleepSample(startDate, endDate, type);
                 }
                 QuerySleepSamplesCompleted?.Invoke(res);

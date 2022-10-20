@@ -8,32 +8,35 @@ typealias SuccessBoolCallback = @convention(c) (Bool) -> Void
 public extension String {
     func toCharPCopy() -> UnsafeMutablePointer<Int8> {
         let utfText = (self as NSString).utf8String!
-        let pointer = UnsafeMutablePointer<Int8>.allocate(capacity: (8 * self.count) + 1)
+        let pointer = UnsafeMutablePointer<Int8>
+            .allocate(capacity: (8 * count) + 1)
         return strcpy(pointer, utfText)
     }
 }
 
 public extension UnsafeMutablePointer<Int8> {
     func toString() -> String {
-        return String(cString: self)
+        String(cString: self)
     }
 }
 
 public extension Error {
     func code() -> Int {
-        return (self as NSError).code
+        (self as NSError).code
     }
+
     func toInteropError() -> InteropError {
-        return InteropError(
-            code: Int32(self.code()),
-            localizedDescription: self.localizedDescription.toCharPCopy())
+        InteropError(
+            code: Int32(code()),
+            localizedDescription: localizedDescription.toCharPCopy()
+        )
     }
 }
 
 public extension Array {
     func toUnsafeMutablePointer() -> UnsafeMutablePointer<Element> {
-        let ptr = UnsafeMutablePointer<Element>.allocate(capacity: self.count)
-        ptr.assign(from: self, count: self.count)
+        let ptr = UnsafeMutablePointer<Element>.allocate(capacity: count)
+        ptr.assign(from: self, count: count)
         return ptr
     }
 }
