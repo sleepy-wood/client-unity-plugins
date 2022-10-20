@@ -27,8 +27,13 @@ make push
 using NativePlugin.HealthData;
 ```
 
-#### `bool HealthData.IsAvailable()`
+#### Functions
 
-#### `void HealthData.RequestAuth()`
+-   `bool HealthData.IsAvailable()`
+-   `void HealthData.RequestAuth()`
+-   `void HealthData.QuerySleepSamples(DateTime startDate, DateTime endDate, int maxNumSamples)`
 
-#### `void HealthData.QuerySleepSamples(DateTime startDate, DateTime endDate, int maxNumSamples)`
+#### Events
+
+-   `event RequestAuthCompletedHandler RequestAuthCompleted`
+-   `event QuerySleepSamplesCompletedHandler QuerySleepSamplesCompleted`
