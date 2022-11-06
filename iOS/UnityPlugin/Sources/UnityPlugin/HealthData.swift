@@ -2,12 +2,16 @@ import Foundation
 import HealthKit
 import UnityPluginStuff
 
-struct HealthData {
+@available(iOS 8.0, macOS 13, *)
+enum HealthData {
     private static let healthStore: HKHealthStore = .init()
-    private static let typeToRead: HKSampleType = HKSampleType
-        .categoryType(forIdentifier: .sleepAnalysis)!
+    private static let typeToRead: [String: HKObjectType] = [
+        "sleep": HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
+        "activity": HKObjectType.activitySummaryType(),
+    ]
 
     private static var sleepSamples: [HKCategorySample] = []
+    private static var activitySamples: [HKActivitySummary] = []
 
     static func isAvailable() -> Bool {
         HKHealthStore.isHealthDataAvailable()
@@ -23,7 +27,7 @@ struct HealthData {
             // let semaphore = DispatchSemaphore(value: 0)
             healthStore.requestAuthorization(
                 toShare: nil,
-                read: Set([typeToRead])
+                read: Set(typeToRead.values)
             ) { granted, error in
                 if let error {
                     print(
@@ -67,7 +71,7 @@ struct HealthData {
             ascending: true
         )
         let query = HKSampleQuery(
-            sampleType: typeToRead,
+            sampleType: typeToRead["sleep"] as! HKSampleType,
             predicate: predicate,
             limit: maxNumSamples,
             sortDescriptors: [sortDescriptor]
@@ -98,5 +102,53 @@ struct HealthData {
             endDateInSeconds: sample.endDate.timeIntervalSince1970,
             value: Int32(sample.value)
         )
+    }
+
+    static func queryActivitySamples(
+        startDateInSeconds: Double,
+        endDateInSeconds: Double,
+        maxNumSamples _: Int,
+        onSuccess: @escaping SuccessBoolCallback,
+        onError: @escaping ErrorCallback
+    ) {
+        let startDate =
+            Date(timeIntervalSince1970: TimeInterval(startDateInSeconds))
+        let endDate =
+            Date(timeIntervalSince1970: TimeInterval(endDateInSeconds))
+
+        let calander = Calendar.current
+        let units: Set<Calendar.Component> = [.day, .month, .year, .era]
+
+        var startDateComponents = calander.dateComponents(
+            units,
+            from: startDate
+        )
+        startDateComponents.calendar = calander
+        var endDateComponents = calander.dateComponents(
+            units,
+            from: endDate
+        )
+        endDateComponents.calendar = calander
+
+        let predicate = HKQuery.predicate(
+            forActivitySummariesBetweenStart: startDateComponents,
+            end: endDateComponents
+        )
+        let query = HKActivitySummaryQuery(
+            predicate: predicate
+        ) { _, samples, error in
+            var success = false
+            if let error {
+                print("queryActivityData error:", error.localizedDescription)
+                onError(error.toInteropError())
+            }
+            if let samples {
+                print("queryActivityData samples:", samples)
+                activitySamples = samples
+                success = true
+            }
+            onSuccess(success)
+        }
+        healthStore.execute(query)
     }
 }
