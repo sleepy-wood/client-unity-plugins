@@ -108,7 +108,6 @@ enum HealthData {
     static func queryActivitySamples(
         startDateInSeconds: Double,
         endDateInSeconds: Double,
-        maxNumSamples _: Int,
         onSuccess: @escaping SuccessBoolCallback,
         onError: @escaping ErrorCallback
     ) {
