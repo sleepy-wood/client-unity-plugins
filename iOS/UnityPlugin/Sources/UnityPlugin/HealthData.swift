@@ -9,6 +9,7 @@ enum HealthData {
         "sleep": HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
         "activity": HKObjectType.activitySummaryType(),
     ]
+    private static let calander: Calendar = .current
 
     private static var sleepSamples: [HKCategorySample] = []
     private static var activitySamples: [HKActivitySummary] = []
@@ -116,9 +117,7 @@ enum HealthData {
         let endDate =
             Date(timeIntervalSince1970: TimeInterval(endDateInSeconds))
 
-        let calander = Calendar.current
         let units: Set<Calendar.Component> = [.day, .month, .year, .era]
-
         var startDateComponents = calander.dateComponents(
             units,
             from: startDate
@@ -150,5 +149,44 @@ enum HealthData {
             onSuccess(success)
         }
         healthStore.execute(query)
+    }
+
+    static func getActivitySamplesCount() -> Int {
+        activitySamples.count
+    }
+
+    static func getActivitySampleAtIndex(index: Int) -> ActivitySample {
+        let sample = activitySamples[index]
+        let date = calander.date(from: sample.dateComponents(for: calander))!
+
+        // let moveUnit = HKUnit.minute()
+        let energyUnit = HKUnit.kilocalorie()
+        let standUnit = HKUnit.count()
+        let exerciseUnit = HKUnit.minute()
+
+        // let moveTime = sample.appleMoveTime.doubleValue(for: moveUnit)
+        let energyBurned = sample.activeEnergyBurned.doubleValue(for: energyUnit)
+        let exerciseTime = sample.appleExerciseTime.doubleValue(for: exerciseUnit)
+        let standHours = sample.appleStandHours.doubleValue(for: standUnit)
+
+        // let moveTimeGoal = sample.appleMoveTimeGoal.doubleValue(for: moveUnit)
+        let energyBurnedGoal = sample.activeEnergyBurnedGoal.doubleValue(for: energyUnit)
+        // let exerciseTimeGoal = sample.exerciseTimeGoal?.doubleValue(for: exerciseUnit) ?? 0.0
+        // let standHoursGoal = sample.standHoursGoal?.doubleValue(for: standUnit) ?? 0.0
+        let exerciseTimeGoal = sample.appleExerciseTimeGoal.doubleValue(for: exerciseUnit)
+        let standHoursGoal = sample.appleStandHoursGoal.doubleValue(for: standUnit)
+
+        return ActivitySample(
+            dateInSeconds: date.timeIntervalSince1970,
+            // isMoveMode: sample.activityMoveMode == .appleMoveTime,
+            // moveTimeInMinutes: moveTime,
+            // moveTimeGoalInMinutes: moveTimeGoal,
+            activeEnergyBurnedInKcal: energyBurned,
+            activeEnergyBurnedGoalInKcal: energyBurnedGoal,
+            exerciseTimeInMinutes: exerciseTime,
+            exerciseTimeGoalInMinutes: exerciseTimeGoal,
+            standHours: standHours,
+            standHoursGoal: standHoursGoal
+        )
     }
 }
