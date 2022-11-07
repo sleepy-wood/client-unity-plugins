@@ -33,6 +33,10 @@ public class NativePluginTest : MonoBehaviour
                 DateTime.Now,
                 100
             );
+            HealthData.QueryActivitySamples(
+                new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                DateTime.Now
+            );
         }
     }
 
