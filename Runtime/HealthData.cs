@@ -31,6 +31,46 @@ namespace NativePlugin.HealthData
         }
     }
 
+    public struct ActivitySample
+    {
+        public readonly DateTime Date;
+
+        // public readonly bool IsMoveMode;
+        // public readonly double MoveTimeInMinutes;
+        // public readonly double MoveTimeGoalInMinutes;
+        public readonly double ActiveEnergyBurnedInKcal;
+        public readonly double ActiveEnergyBurnedGoalInKcal;
+        public readonly double ExerciseTimeInMinutes;
+        public readonly double ExerciseTimeGoalInMinutes;
+        public readonly double StandHours;
+        public readonly double StandHoursGoal;
+
+        public ActivitySample(
+            DateTime date,
+            // bool isMoveMode,
+            // double moveTimeInMinutes,
+            // double moveTimeGoalInMinutes,
+            double activeEnergyBurnedInKcal,
+            double activeEnergyBurnedGoalInKcal,
+            double exerciseTimeInMinutes,
+            double exerciseTimeGoalInMinutes,
+            double standHours,
+            double standHoursGoal
+        )
+        {
+            Date = date;
+            // IsMoveMode = isMoveMode;
+            // MoveTimeInMinutes = moveTimeInMinutes;
+            // MoveTimeGoalInMinutes = moveTimeGoalInMinutes;
+            ActiveEnergyBurnedInKcal = activeEnergyBurnedInKcal;
+            ActiveEnergyBurnedGoalInKcal = activeEnergyBurnedGoalInKcal;
+            ExerciseTimeInMinutes = exerciseTimeInMinutes;
+            ExerciseTimeGoalInMinutes = exerciseTimeGoalInMinutes;
+            StandHours = standHours;
+            StandHoursGoal = standHoursGoal;
+        }
+    }
+
     public class HealthData
     {
         public delegate void RequestAuthCompletedHandler(bool granted);
@@ -38,6 +78,9 @@ namespace NativePlugin.HealthData
 
         public delegate void QuerySleepSamplesCompletedHandler(SleepSample[] samples);
         public static event QuerySleepSamplesCompletedHandler QuerySleepSamplesCompleted;
+
+        public delegate void QueryActivitySamplesCompletedHandler(ActivitySample[] samples);
+        public static event QueryActivitySamplesCompletedHandler QueryActivitySamplesCompleted;
 
 #if UNITY_IOS
         [DllImport("__Internal")]
@@ -63,6 +106,20 @@ namespace NativePlugin.HealthData
 
         [DllImport("__Internal")]
         private static extern AppleSleepSample iOS_healthDataGetSleepSampleAtIndex(int index);
+
+        [DllImport("__Internal")]
+        private static extern void iOS_healthDataQueryActivitySamples(
+            double startDateInSeconds,
+            double endDateInSeconds,
+            AppleSuccessCallback<bool> onSuccess,
+            AppleErrorCallback onError
+        );
+
+        [DllImport("__Internal")]
+        private static extern int iOS_healthDataGetActivitySamplesCount();
+
+        [DllImport("__Internal")]
+        private static extern AppleActivitySample iOS_healthDataGetActivitySampleAtIndex(int index);
 #endif
 
         public static bool IsAvailable()
@@ -154,6 +211,68 @@ namespace NativePlugin.HealthData
 
         [MonoPInvokeCallback(typeof(AppleErrorCallback))]
         private static void AppleOnQuerySleepSamplesFailed(AppleInteropError error)
+        {
+            // TODO: Handle error?
+        }
+#endif
+
+        public static void QueryActivitySamples(DateTime startDate, DateTime endDate)
+        {
+            double startDateInSeconds = ConvertToUnixTimestamp(startDate);
+            double endDateInSeconds = ConvertToUnixTimestamp(endDate);
+#if UNITY_IOS
+            iOS_healthDataQueryActivitySamples(
+                startDateInSeconds,
+                endDateInSeconds,
+                AppleOnQueryActivitySamplesCompleted,
+                AppleOnQueryActivitySamplesFailed
+            );
+#else
+            Debug.Log("QueryActivitySamples: Unsupported Platform");
+#endif
+        }
+
+#if UNITY_IOS
+        [MonoPInvokeCallback(typeof(AppleSuccessCallback<bool>))]
+        private static void AppleOnQueryActivitySamplesCompleted(bool success)
+        {
+            Debug.Log("AppleOnQueryActivitySamplesCompleted: " + success);
+            if (success)
+            {
+                int numSamples = iOS_healthDataGetActivitySamplesCount();
+                ActivitySample[] res = new ActivitySample[numSamples];
+                for (int i = 0; i < numSamples; i++)
+                {
+                    AppleActivitySample sample = iOS_healthDataGetActivitySampleAtIndex(i);
+                    DateTime date = ConvertFromUnixTimestamp(sample.dateInSeconds);
+                    Debug.Log(
+                        "AppleOnQueryActivitySamplesCompleted: "
+                            + date
+                            + " - "
+                            + sample.standHours
+                            + " - "
+                            + sample.standHoursGoal
+                    );
+                    res[i] = new ActivitySample(
+                        date,
+                        sample.activeEnergyBurnedInKcal,
+                        sample.activeEnergyBurnedGoalInKcal,
+                        sample.exerciseTimeInMinutes,
+                        sample.exerciseTimeGoalInMinutes,
+                        sample.standHours,
+                        sample.standHoursGoal
+                    );
+                }
+                QueryActivitySamplesCompleted?.Invoke(res);
+            }
+            else
+            {
+                QueryActivitySamplesCompleted?.Invoke(null);
+            }
+        }
+
+        [MonoPInvokeCallback(typeof(AppleErrorCallback))]
+        private static void AppleOnQueryActivitySamplesFailed(AppleInteropError error)
         {
             // TODO: Handle error?
         }
