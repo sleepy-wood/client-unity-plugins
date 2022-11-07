@@ -34,6 +34,7 @@ namespace NativePlugin.HealthData
     public struct ActivitySample
     {
         public readonly DateTime Date;
+
         // public readonly bool IsMoveMode;
         // public readonly double MoveTimeInMinutes;
         // public readonly double MoveTimeGoalInMinutes;
@@ -215,10 +216,7 @@ namespace NativePlugin.HealthData
         }
 #endif
 
-        public static void QueryActivitySamples(
-            DateTime startDate,
-            DateTime endDate
-        )
+        public static void QueryActivitySamples(DateTime startDate, DateTime endDate)
         {
             double startDateInSeconds = ConvertToUnixTimestamp(startDate);
             double endDateInSeconds = ConvertToUnixTimestamp(endDate);
@@ -262,7 +260,7 @@ namespace NativePlugin.HealthData
                         sample.exerciseTimeInMinutes,
                         sample.exerciseTimeGoalInMinutes,
                         sample.standHours,
-                        sample.standHoursGoal,
+                        sample.standHoursGoal
                     );
                 }
                 QueryActivitySamplesCompleted?.Invoke(res);
