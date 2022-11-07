@@ -217,7 +217,7 @@ namespace NativePlugin.HealthData
 
         public static void QueryActivitySamples(
             DateTime startDate,
-            DateTime endDate,
+            DateTime endDate
         )
         {
             double startDateInSeconds = ConvertToUnixTimestamp(startDate);
