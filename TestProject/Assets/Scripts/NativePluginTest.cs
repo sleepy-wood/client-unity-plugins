@@ -14,6 +14,7 @@ public class NativePluginTest : MonoBehaviour
         // register event handlers
         HealthData.RequestAuthCompleted += OnRequestAuthCompleted;
         HealthData.QuerySleepSamplesCompleted += OnQuerySleepSamplesCompleted;
+        HealthData.QueryActivitySamplesCompleted += OnQueryActivitySamplesCompleted;
         // if HealthData is available (not available in iPad...), request authorization
         if (HealthData.IsAvailable())
         {
@@ -41,6 +42,15 @@ public class NativePluginTest : MonoBehaviour
         if (samples != null)
         {
             Debug.Log("Start:QuerySleepSamplesCompleted: " + samples.Length.ToString());
+        }
+    }
+
+    void OnQueryActivitySamplesCompleted(ActivitySample[] samples)
+    {
+        // if there was error, samples will be null
+        if (samples != null)
+        {
+            Debug.Log("Start:QueryActivitySamplesCompleted: " + samples.Length.ToString());
         }
     }
 }
