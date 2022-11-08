@@ -14,10 +14,10 @@ typedef struct {
     // double moveTimeGoalInMinutes;
     double activeEnergyBurnedInKcal;
     double activeEnergyBurnedGoalInKcal;
-    double exerciseTimeInMinutes;
-    double exerciseTimeGoalInMinutes;
-    double standHours;
-    double standHoursGoal;
+    int exerciseTimeInMinutes;
+    int exerciseTimeGoalInMinutes;
+    int standHours;
+    int standHoursGoal;
 } ActivitySample;
 
 #endif

@@ -21,9 +21,9 @@ namespace NativePlugin.HealthData.IOS
         // public readonly double moveTimeGoalInMinutes;
         public readonly double activeEnergyBurnedInKcal;
         public readonly double activeEnergyBurnedGoalInKcal;
-        public readonly double exerciseTimeInMinutes;
-        public readonly double exerciseTimeGoalInMinutes;
-        public readonly double standHours;
-        public readonly double standHoursGoal;
+        public readonly int exerciseTimeInMinutes;
+        public readonly int exerciseTimeGoalInMinutes;
+        public readonly int standHours;
+        public readonly int standHoursGoal;
     }
 }

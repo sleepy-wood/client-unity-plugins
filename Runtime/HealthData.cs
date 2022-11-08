@@ -40,10 +40,10 @@ namespace NativePlugin.HealthData
         // public readonly double MoveTimeGoalInMinutes;
         public readonly double ActiveEnergyBurnedInKcal;
         public readonly double ActiveEnergyBurnedGoalInKcal;
-        public readonly double ExerciseTimeInMinutes;
-        public readonly double ExerciseTimeGoalInMinutes;
-        public readonly double StandHours;
-        public readonly double StandHoursGoal;
+        public readonly int ExerciseTimeInMinutes;
+        public readonly int ExerciseTimeGoalInMinutes;
+        public readonly int StandHours;
+        public readonly int StandHoursGoal;
 
         public ActivitySample(
             DateTime date,
@@ -52,10 +52,10 @@ namespace NativePlugin.HealthData
             // double moveTimeGoalInMinutes,
             double activeEnergyBurnedInKcal,
             double activeEnergyBurnedGoalInKcal,
-            double exerciseTimeInMinutes,
-            double exerciseTimeGoalInMinutes,
-            double standHours,
-            double standHoursGoal
+            int exerciseTimeInMinutes,
+            int exerciseTimeGoalInMinutes,
+            int standHours,
+            int standHoursGoal
         )
         {
             Date = date;

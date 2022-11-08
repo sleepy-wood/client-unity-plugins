@@ -182,10 +182,10 @@ enum HealthData {
             // moveTimeGoalInMinutes: moveTimeGoal,
             activeEnergyBurnedInKcal: energyBurned,
             activeEnergyBurnedGoalInKcal: energyBurnedGoal,
-            exerciseTimeInMinutes: exerciseTime,
-            exerciseTimeGoalInMinutes: exerciseTimeGoal,
-            standHours: standHours,
-            standHoursGoal: standHoursGoal
+            exerciseTimeInMinutes: Int32(exerciseTime),
+            exerciseTimeGoalInMinutes: Int32(exerciseTimeGoal),
+            standHours: Int32(standHours),
+            standHoursGoal: Int32(standHoursGoal)
         )
     }
 }
