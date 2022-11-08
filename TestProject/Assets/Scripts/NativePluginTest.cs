@@ -31,7 +31,7 @@ public class NativePluginTest : MonoBehaviour
             HealthData.QuerySleepSamples(
                 new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                 DateTime.Now,
-                100
+                10000
             );
             HealthData.QueryActivitySamples(
                 new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),

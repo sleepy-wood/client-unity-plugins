@@ -15,7 +15,6 @@ namespace NativePlugin.HealthData.IOS
     public struct AppleActivitySample
     {
         public readonly double dateInSeconds;
-
         // public readonly bool isMoveMode;
         // public readonly double moveTimeInMinutes;
         // public readonly double moveTimeGoalInMinutes;
