@@ -250,6 +250,7 @@ xcuserdata/
 *.xccheckout
 
 *.framework
+*.bcsymbolmap
 # !dist/**/*.framework
 dist
 /*[Bb]uild*/
