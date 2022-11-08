@@ -33,8 +33,16 @@ using NativePlugin.HealthData;
 -   `bool HealthData.IsAvailable()`
 -   `void HealthData.RequestAuth()`
 -   `void HealthData.QuerySleepSamples(DateTime startDate, DateTime endDate, int maxNumSamples)`
+-   `void HealthData.QueryActivitySamples(DateTime startDate, DateTime endDate)`
 
 #### Events
 
 -   `event RequestAuthCompletedHandler RequestAuthCompleted`
 -   `event QuerySleepSamplesCompletedHandler QuerySleepSamplesCompleted`
+-   `event QueryActivitySamplesCompletedHandler QueryActivitySamplesCompleted`
+
+#### Delegates
+
+-   `delegate void RequestAuthCompletedHandler(bool granted)`
+-   `delegate void QuerySleepSamplesCompletedHandler(SleepSample[] samples)`
+-   `delegate void QueryActivitySamplesCompletedHandler(ActivitySample[] samples)`
