@@ -4,6 +4,7 @@ using AOT;
 using UnityEngine;
 using NativePlugin.IOS;
 using NativePlugin.HealthData.IOS;
+using NativePlugin.HealthData.Mock;
 
 namespace NativePlugin.HealthData
 {
@@ -71,7 +72,7 @@ namespace NativePlugin.HealthData
         }
     }
 
-    public class HealthData
+    public static class HealthData
     {
         public delegate void RequestAuthCompletedHandler(bool granted);
         public static event RequestAuthCompletedHandler RequestAuthCompleted;
@@ -127,7 +128,8 @@ namespace NativePlugin.HealthData
 #if UNITY_IOS
             return iOS_healthDataIsAvailable();
 #else
-            return false;
+            Debug.Log("IsAvailable: Unsupported Platform");
+            return MockHealthData.IsAvailable();
 #endif
         }
 
@@ -137,6 +139,7 @@ namespace NativePlugin.HealthData
             iOS_healthDataRequestAuth(AppleOnRequestAuthCompleted, AppleOnRequestAuthFailed);
 #else
             Debug.Log("RequestAuth: Unsupported Platform");
+            RequestAuthCompleted?.Invoke(MockHealthData.RequestAuth());
 #endif
         }
 
@@ -161,8 +164,8 @@ namespace NativePlugin.HealthData
             int maxNumSamples
         )
         {
-            double startDateInSeconds = ConvertToUnixTimestamp(startDate);
-            double endDateInSeconds = ConvertToUnixTimestamp(endDate);
+            double startDateInSeconds = HealthUtils.ConvertToUnixTimestamp(startDate);
+            double endDateInSeconds = HealthUtils.ConvertToUnixTimestamp(endDate);
 #if UNITY_IOS
             iOS_healthDataQuerySleepSamples(
                 startDateInSeconds,
@@ -173,6 +176,9 @@ namespace NativePlugin.HealthData
             );
 #else
             Debug.Log("QuerySleepSamples: Unsupported Platform");
+            QuerySleepSamplesCompleted?.Invoke(
+                MockHealthData.QuerySleepSamples(startDate, endDate, maxNumSamples)
+            );
 #endif
         }
 
@@ -188,8 +194,12 @@ namespace NativePlugin.HealthData
                 for (int i = 0; i < numSamples; i++)
                 {
                     AppleSleepSample sample = iOS_healthDataGetSleepSampleAtIndex(i);
-                    DateTime startDate = ConvertFromUnixTimestamp(sample.startDateInSeconds);
-                    DateTime endDate = ConvertFromUnixTimestamp(sample.endDateInSeconds);
+                    DateTime startDate = HealthUtils.ConvertFromUnixTimestamp(
+                        sample.startDateInSeconds
+                    );
+                    DateTime endDate = HealthUtils.ConvertFromUnixTimestamp(
+                        sample.endDateInSeconds
+                    );
                     SleepType type = (SleepType)sample.value;
                     Debug.Log(
                         "AppleOnQuerySleepSamplesCompleted: "
@@ -218,8 +228,8 @@ namespace NativePlugin.HealthData
 
         public static void QueryActivitySamples(DateTime startDate, DateTime endDate)
         {
-            double startDateInSeconds = ConvertToUnixTimestamp(startDate);
-            double endDateInSeconds = ConvertToUnixTimestamp(endDate);
+            double startDateInSeconds = HealthUtils.ConvertToUnixTimestamp(startDate);
+            double endDateInSeconds = HealthUtils.ConvertToUnixTimestamp(endDate);
 #if UNITY_IOS
             iOS_healthDataQueryActivitySamples(
                 startDateInSeconds,
@@ -229,6 +239,9 @@ namespace NativePlugin.HealthData
             );
 #else
             Debug.Log("QueryActivitySamples: Unsupported Platform");
+            QueryActivitySamplesCompleted?.Invoke(
+                MockHealthData.QueryActivitySamples(startDate, endDate)
+            );
 #endif
         }
 
@@ -244,7 +257,7 @@ namespace NativePlugin.HealthData
                 for (int i = 0; i < numSamples; i++)
                 {
                     AppleActivitySample sample = iOS_healthDataGetActivitySampleAtIndex(i);
-                    DateTime date = ConvertFromUnixTimestamp(sample.dateInSeconds);
+                    DateTime date = HealthUtils.ConvertFromUnixTimestamp(sample.dateInSeconds);
                     Debug.Log(
                         "AppleOnQueryActivitySamplesCompleted: "
                             + date
@@ -277,7 +290,10 @@ namespace NativePlugin.HealthData
             // TODO: Handle error?
         }
 #endif
+    }
 
+    public static class HealthUtils
+    {
         public static DateTime ConvertFromUnixTimestamp(double timestamp)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
