@@ -24,7 +24,7 @@ enum HealthData {
     ) {
         // let group = DispatchGroup()
         // group.enter()
-        DispatchQueue.global(qos: .userInitiated).async {
+        DispatchQueue.main.async {
             // let semaphore = DispatchSemaphore(value: 0)
             healthStore.requestAuthorization(
                 toShare: nil,
