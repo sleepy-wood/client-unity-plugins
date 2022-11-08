@@ -16,6 +16,7 @@ namespace NativePlugin.HealthData.Mock
     public struct MockActivitySample
     {
         public readonly double dateInSeconds;
+
         // public readonly bool isMoveMode;
         // public readonly double moveTimeInMinutes;
         // public readonly double moveTimeGoalInMinutes;
@@ -63,7 +64,9 @@ namespace NativePlugin.HealthData.Mock
         )
         {
             TextAsset mockSleepJson = Resources.Load<TextAsset>("mockSleep");
-            MockSleepSample[] mockSleepSamples = JsonHelper.FromJson<MockSleepSample>(mockSleepJson.text);
+            MockSleepSample[] mockSleepSamples = JsonHelper.FromJson<MockSleepSample>(
+                mockSleepJson.text
+            );
             List<SleepSample> sleepSamples = new List<SleepSample>();
             for (int i = 0; i < mockSleepSamples.Length; i++)
             {
@@ -83,13 +86,12 @@ namespace NativePlugin.HealthData.Mock
             return sleepSamples.ToArray();
         }
 
-        public static ActivitySample[] QueryActivitySamples(
-            DateTime startDate,
-            DateTime endDate
-        )
+        public static ActivitySample[] QueryActivitySamples(DateTime startDate, DateTime endDate)
         {
             TextAsset mockActivityJson = Resources.Load<TextAsset>("mockActivity");
-            MockActivitySample[] mockActivitySamples = JsonHelper.FromJson<MockActivitySample>(mockActivityJson.text);
+            MockActivitySample[] mockActivitySamples = JsonHelper.FromJson<MockActivitySample>(
+                mockActivityJson.text
+            );
             List<ActivitySample> activitySamples = new List<ActivitySample>();
             for (int i = 0; i < mockActivitySamples.Length; i++)
             {
@@ -97,15 +99,17 @@ namespace NativePlugin.HealthData.Mock
                 DateTime date = HealthUtils.ConvertFromUnixTimestamp(sample.dateInSeconds);
                 if (date >= startDate && date <= endDate)
                 {
-                    activitySamples.Add(new ActivitySample(
-                        date,
-                        sample.activeEnergyBurnedInKcal,
-                        sample.activeEnergyBurnedGoalInKcal,
-                        sample.exerciseTimeInMinutes,
-                        sample.exerciseTimeGoalInMinutes,
-                        sample.standHours,
-                        sample.standHoursGoal
-                    ));
+                    activitySamples.Add(
+                        new ActivitySample(
+                            date,
+                            sample.activeEnergyBurnedInKcal,
+                            sample.activeEnergyBurnedGoalInKcal,
+                            sample.exerciseTimeInMinutes,
+                            sample.exerciseTimeGoalInMinutes,
+                            sample.standHours,
+                            sample.standHoursGoal
+                        )
+                    );
                 }
             }
             return activitySamples.ToArray();

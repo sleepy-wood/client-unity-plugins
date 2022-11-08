@@ -176,11 +176,9 @@ namespace NativePlugin.HealthData
             );
 #else
             Debug.Log("QuerySleepSamples: Unsupported Platform");
-            QuerySleepSamplesCompleted?.Invoke(MockHealthData.QuerySleepSamples(
-                startDate,
-                endDate,
-                maxNumSamples
-            ));
+            QuerySleepSamplesCompleted?.Invoke(
+                MockHealthData.QuerySleepSamples(startDate, endDate, maxNumSamples)
+            );
 #endif
         }
 
@@ -196,8 +194,12 @@ namespace NativePlugin.HealthData
                 for (int i = 0; i < numSamples; i++)
                 {
                     AppleSleepSample sample = iOS_healthDataGetSleepSampleAtIndex(i);
-                    DateTime startDate = HealthUtils.ConvertFromUnixTimestamp(sample.startDateInSeconds);
-                    DateTime endDate = HealthUtils.ConvertFromUnixTimestamp(sample.endDateInSeconds);
+                    DateTime startDate = HealthUtils.ConvertFromUnixTimestamp(
+                        sample.startDateInSeconds
+                    );
+                    DateTime endDate = HealthUtils.ConvertFromUnixTimestamp(
+                        sample.endDateInSeconds
+                    );
                     SleepType type = (SleepType)sample.value;
                     Debug.Log(
                         "AppleOnQuerySleepSamplesCompleted: "
@@ -237,10 +239,9 @@ namespace NativePlugin.HealthData
             );
 #else
             Debug.Log("QueryActivitySamples: Unsupported Platform");
-            QueryActivitySamplesCompleted?.Invoke(MockHealthData.QueryActivitySamples(
-                startDate,
-                endDate
-            ));
+            QueryActivitySamplesCompleted?.Invoke(
+                MockHealthData.QueryActivitySamples(startDate, endDate)
+            );
 #endif
         }
 
