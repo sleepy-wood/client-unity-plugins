@@ -32,7 +32,7 @@ public class NativePluginPostProcessBuild
             var project = new PBXProject();
             project.ReadFromFile(projectPath);
             string targetGuid = project.GetUnityMainTargetGuid();
-            project.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "NO");
+            // project.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "NO");
             // Add frameworks
             project.AddFrameworkToProject(targetGuid, "HealthKit.framework", false);
             File.WriteAllText(projectPath, project.WriteToString());
