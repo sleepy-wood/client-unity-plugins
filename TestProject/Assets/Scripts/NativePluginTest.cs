@@ -1,60 +1,79 @@
 using System;
 using UnityEngine;
-using NativePlugin;
-using NativePlugin.HealthData;
+
+// using NativePlugin;
+// using NativePlugin.HealthData;
 
 public class NativePluginTest : MonoBehaviour
 {
     void Start()
     {
-        // just for testing purpose
-        HelloTest.RunHello();
-        Debug.Log("DebugLog Test");
-        Debug.Log("HealthDataIsAvailable: " + HealthData.IsAvailable().ToString());
-        // register event handlers
-        HealthData.RequestAuthCompleted += OnRequestAuthCompleted;
-        HealthData.QuerySleepSamplesCompleted += OnQuerySleepSamplesCompleted;
-        HealthData.QueryActivitySamplesCompleted += OnQueryActivitySamplesCompleted;
-        // if HealthData is available (not available in iPad...), request authorization
-        if (HealthData.IsAvailable())
-        {
-            HealthData.RequestAuth();
-        }
+        HealthDataStore.Init();
+        // // just for testing purpose
+        // HelloTest.RunHello();
+        // Debug.Log("DebugLog Test");
+        // Debug.Log("HealthDataIsAvailable: " + HealthData.IsAvailable().ToString());
+        // // register event handlers
+        // HealthData.RequestAuthCompleted += OnRequestAuthCompleted;
+        // HealthData.QuerySleepSamplesCompleted += OnQuerySleepSamplesCompleted;
+        // HealthData.QueryActivitySamplesCompleted += OnQueryActivitySamplesCompleted;
+        // // if HealthData is available (not available in iPad...), request authorization
+        // if (HealthData.IsAvailable())
+        // {
+        //     HealthData.RequestAuth();
+        // }
     }
 
-    void OnRequestAuthCompleted(bool granted)
+    bool once = false;
+
+    void Update()
     {
-        Debug.Log("Start:RequestAuthCompleted: " + granted.ToString());
-        // if authorization is granted, query sleep samples
-        if (granted)
+        if (HealthDataStore.GetStatus() == HealthDataStoreStatus.Loaded && !once)
         {
-            HealthData.QuerySleepSamples(
-                new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                DateTime.Now,
-                10000
+            once = true;
+            Debug.Log("SleepSamples: " + HealthDataStore.SleepSamples.Length);
+            Debug.Log("ActivitySamples: " + HealthDataStore.ActivitySamples.Length);
+            HealthReport report = HealthDataAnalyzer.GetDailyReport(
+                new DateTime(2022, 10, 06, 17, 0, 0, 0, DateTimeKind.Local),
+                6
             );
-            HealthData.QueryActivitySamples(
-                new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                DateTime.Now
-            );
+            Debug.Log(JsonUtility.ToJson(report, true));
         }
     }
 
-    void OnQuerySleepSamplesCompleted(SleepSample[] samples)
-    {
-        // if there was error, samples will be null
-        if (samples != null)
-        {
-            Debug.Log("Start:QuerySleepSamplesCompleted: " + samples.Length.ToString());
-        }
-    }
+    // void OnRequestAuthCompleted(bool granted)
+    // {
+    //     Debug.Log("Start:RequestAuthCompleted: " + granted.ToString());
+    //     // if authorization is granted, query sleep samples
+    //     if (granted)
+    //     {
+    //         HealthData.QuerySleepSamples(
+    //             new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+    //             DateTime.Now,
+    //             10000
+    //         );
+    //         HealthData.QueryActivitySamples(
+    //             new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+    //             DateTime.Now
+    //         );
+    //     }
+    // }
 
-    void OnQueryActivitySamplesCompleted(ActivitySample[] samples)
-    {
-        // if there was error, samples will be null
-        if (samples != null)
-        {
-            Debug.Log("Start:QueryActivitySamplesCompleted: " + samples.Length.ToString());
-        }
-    }
+    // void OnQuerySleepSamplesCompleted(SleepSample[] samples)
+    // {
+    //     // if there was error, samples will be null
+    //     if (samples != null)
+    //     {
+    //         Debug.Log("Start:QuerySleepSamplesCompleted: " + samples.Length.ToString());
+    //     }
+    // }
+
+    // void OnQueryActivitySamplesCompleted(ActivitySample[] samples)
+    // {
+    //     // if there was error, samples will be null
+    //     if (samples != null)
+    //     {
+    //         Debug.Log("Start:QueryActivitySamplesCompleted: " + samples.Length.ToString());
+    //     }
+    // }
 }
