@@ -94,7 +94,7 @@ public static class HealthDataAnalyzer
                 new SleepReport(
                     SleepAmount.Zero,
                     SleepRiseTimeVariance.LargeBad,
-                    SleepDaytimeNap.YesBad
+                    SleepDaytimeNap.NoGood
                 ),
                 new ActivityReport(0, 0, 0)
             );
@@ -114,7 +114,7 @@ public static class HealthDataAnalyzer
             return new SleepReport(
                 SleepAmount.Zero,
                 SleepRiseTimeVariance.LargeBad,
-                SleepDaytimeNap.YesBad
+                SleepDaytimeNap.NoGood
             );
         }
 
@@ -228,6 +228,7 @@ public static class HealthDataAnalyzer
 
     private static SleepAmount GetSleepAmount(double totalSleepTime)
     {
+        Debug.Log("totalSleepTime: " + totalSleepTime);
         if (totalSleepTime == 0)
         {
             return SleepAmount.Zero;
@@ -277,6 +278,7 @@ public static class HealthDataAnalyzer
             {
                 riseTimes.Add(eDate.TimeOfDay.TotalHours);
             }
+            Debug.Log("RiseTimes: " + string.Join(", ", riseTimes));
             double totalVariance = 0;
             for (int i = 0; i < riseTimes.Count - 1; i++)
             {
@@ -330,6 +332,7 @@ public static class HealthDataAnalyzer
                     ).TotalHours;
                 }
             }
+            Debug.Log("TotalDaytimeNap: " + totalDaytimeNap);
             if (totalDaytimeNap > 0.5) // 30분 이상 daytime 수면
             {
                 return SleepDaytimeNap.YesBad;
