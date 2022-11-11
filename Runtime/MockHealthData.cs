@@ -5,27 +5,27 @@ using UnityEngine;
 namespace NativePlugin.HealthData.Mock
 {
     [Serializable]
-    public struct MockSleepSample
+    public class MockSleepSample
     {
-        public readonly double startDateInSeconds;
-        public readonly double endDateInSeconds;
-        public readonly int value;
+        public double startDateInSeconds;
+        public double endDateInSeconds;
+        public int value;
     }
 
     [Serializable]
-    public struct MockActivitySample
+    public class MockActivitySample
     {
-        public readonly double dateInSeconds;
+        public double dateInSeconds;
 
         // public readonly bool isMoveMode;
         // public readonly double moveTimeInMinutes;
         // public readonly double moveTimeGoalInMinutes;
-        public readonly double activeEnergyBurnedInKcal;
-        public readonly double activeEnergyBurnedGoalInKcal;
-        public readonly int exerciseTimeInMinutes;
-        public readonly int exerciseTimeGoalInMinutes;
-        public readonly int standHours;
-        public readonly int standHoursGoal;
+        public double activeEnergyBurnedInKcal;
+        public double activeEnergyBurnedGoalInKcal;
+        public int exerciseTimeInMinutes;
+        public int exerciseTimeGoalInMinutes;
+        public int standHours;
+        public int standHoursGoal;
     }
 
     // https://stackoverflow.com/questions/36239705/serialize-and-deserialize-json-and-json-array-in-unity
