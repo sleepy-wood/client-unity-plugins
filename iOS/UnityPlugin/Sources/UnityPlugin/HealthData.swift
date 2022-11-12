@@ -8,6 +8,9 @@ enum HealthData {
     private static let typeToRead: [String: HKObjectType] = [
         "sleep": HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
         "activity": HKObjectType.activitySummaryType(),
+        "heart": HKObjectType.quantityType(forIdentifier: .heartRate)!,
+        "respiratory": HKObjectType.quantityType(forIdentifier: .respiratoryRate)!,
+        "oxygen": HKObjectType.quantityType(forIdentifier: .oxygenSaturation)!,
     ]
     private static let calander: Calendar = .current
 
