@@ -255,3 +255,4 @@ xcuserdata/
 dist
 /*[Bb]uild*/
 TestProject/Assets/Plugins/*
+*.mlmodelc

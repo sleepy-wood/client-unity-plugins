@@ -28,7 +28,10 @@ let package = Package(
         // in packages this package depends on.
         .target(
             name: "UnityPlugin",
-            dependencies: ["UnityPluginStuff"]
+            dependencies: ["UnityPluginStuff"],
+            resources: [
+                .process("SleepDetector.mlmodelc"),
+            ]
         ),
         .target(
             name: "UnityPluginStuff",
