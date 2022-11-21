@@ -4,7 +4,7 @@ import UnityPluginStuff
 
 @available(iOS 8.0, macOS 13, *)
 enum HealthData {
-    private static let healthStore: HKHealthStore = .init()
+    static let healthStore: HKHealthStore = .init()
     private static let typeToRead: [String: HKObjectType] = [
         "sleep": HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
         "activity": HKObjectType.activitySummaryType(),
