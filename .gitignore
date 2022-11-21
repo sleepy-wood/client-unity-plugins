@@ -255,4 +255,6 @@ xcuserdata/
 dist
 /*[Bb]uild*/
 TestProject/Assets/Plugins/*
+TestProject/Assets/Scripts/HealthDataAnalyzer.*
+TestProject/Assets/Scripts/HealthDataStore.*
 *.mlmodelc
