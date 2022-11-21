@@ -3,12 +3,14 @@ using UnityEngine;
 
 // using NativePlugin;
 // using NativePlugin.HealthData;
+using NativePlugin.SleepDetection;
 
 public class NativePluginTest : MonoBehaviour
 {
     void Start()
     {
         HealthDataStore.Init();
+        InvokeRepeating("CheckSleep", 0, 1);
         // // just for testing purpose
         // HelloTest.RunHello();
         // Debug.Log("DebugLog Test");
@@ -38,6 +40,15 @@ public class NativePluginTest : MonoBehaviour
                 6
             );
             Debug.Log(JsonUtility.ToJson(report, true));
+        }
+    }
+
+    void CheckSleep()
+    {
+        if (SleepDetection.IsAvailable())
+        {
+            SleepStatus status = SleepDetection.DetectSleep();
+            Debug.Log("SleepStatus: " + status.ToString());
         }
     }
 

@@ -31,43 +31,46 @@ enum SleepDetection {
                     print("accelerometerUpdate error:", error.localizedDescription)
                 }
                 if let data {
+                    // print(Date(), "accelerometerUpdate:", data)
                     acceleration = data.acceleration
                 }
             }
             activityManager.startActivityUpdates(to: .main) { activity in
                 if let activity {
+                    // print(Date(), "accelerometerUpdate:", activity)
                     stationary = activity.stationary
                 }
             }
-
-            let startDate = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
-            let predicate = HKQuery.predicateForSamples(
-                withStart: startDate,
-                end: nil,
-                options: .strictStartDate
-            )
-            let sortDescriptor = NSSortDescriptor(
-                key: HKSampleSortIdentifierStartDate,
-                ascending: false
-            )
-            let query = HKSampleQuery(
-                sampleType: HKObjectType.quantityType(forIdentifier: .heartRate)!,
-                predicate: predicate,
-                limit: HKObjectQueryNoLimit,
-                sortDescriptors: [sortDescriptor]
-            ) { _, samples, error in
-                if let error {
-                    print("heartRateQuery error:", error.localizedDescription)
+            DispatchQueue.global().async {
+                Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+                    let startDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+                    let predicate = HKQuery.predicateForSamples(
+                        withStart: startDate,
+                        end: nil,
+                        options: .strictStartDate
+                    )
+                    let sortDescriptor = NSSortDescriptor(
+                        key: HKSampleSortIdentifierStartDate,
+                        ascending: false
+                    )
+                    let query = HKSampleQuery(
+                        sampleType: HKObjectType.quantityType(forIdentifier: .heartRate)!,
+                        predicate: predicate,
+                        limit: HKObjectQueryNoLimit,
+                        sortDescriptors: [sortDescriptor]
+                    ) { _, samples, error in
+                        if let error {
+                            print("heartRateQuery error:", error.localizedDescription)
+                        }
+                        if let samples {
+                            heartRateSamples = samples as! [HKQuantitySample]
+                        }
+                    }
+                    HealthData.healthStore.execute(query)
+                    print("heartRateQuery executed")
                 }
-                if let samples {
-                    heartRateSamples = samples as! [HKQuantitySample]
-                }
+                RunLoop.current.run()
             }
-            let timer = Timer(fire: Date(), interval: 10.0, repeats: true) { _ in
-                print("timer fired")
-                HealthData.healthStore.execute(query)
-            }
-            RunLoop.current.add(timer, forMode: .default)
             initialized = true
             print("SleepDetection initialized")
         }

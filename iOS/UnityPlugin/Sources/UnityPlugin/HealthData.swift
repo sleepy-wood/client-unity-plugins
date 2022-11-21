@@ -87,7 +87,7 @@ enum HealthData {
                 onError(error.toInteropError())
             }
             if let samples {
-                print("querySleepData samples:", samples)
+                // print("querySleepData samples:", samples)
                 sleepSamples = samples as! [HKCategorySample]
                 success = true
             }
@@ -145,7 +145,7 @@ enum HealthData {
                 onError(error.toInteropError())
             }
             if let samples {
-                print("queryActivityData samples:", samples)
+                // print("queryActivityData samples:", samples)
                 activitySamples = samples
                 success = true
             }
