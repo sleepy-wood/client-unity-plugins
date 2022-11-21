@@ -46,3 +46,14 @@ using NativePlugin.HealthData;
 -   `delegate void RequestAuthCompletedHandler(bool granted)`
 -   `delegate void QuerySleepSamplesCompletedHandler(SleepSample[] samples)`
 -   `delegate void QueryActivitySamplesCompletedHandler(ActivitySample[] samples)`
+
+### SleepDetection
+
+```csharp
+using NativePlugin.SleepDetection;
+```
+
+#### Functions
+
+-   `bool SleepDetection.IsAvailable()`
+-   `SleepStatus SleepDetection.DetectSleep()`
