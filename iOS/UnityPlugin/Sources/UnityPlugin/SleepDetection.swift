@@ -41,6 +41,7 @@ enum SleepDetection {
                     stationary = activity.stationary
                 }
             }
+            // TODO: 현재 10초마다 Heart Rate 가져오는데, HKObserverQuery를 사용하는게 더 나을지도
             DispatchQueue.global().async {
                 let timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
                     let startDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
