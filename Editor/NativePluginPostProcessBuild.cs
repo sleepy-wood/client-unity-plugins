@@ -21,7 +21,11 @@ public class NativePluginPostProcessBuild
             // Read health data
             rootDict.SetString(
                 "NSHealthShareUsageDescription",
-                "This app needs to access your health data to work properly."
+                "This app needs to access your health data to grow your own personalized tree."
+            );
+            rootDict.SetString(
+                "NSMotionUsageDescription",
+                "This app needs to access your motion data to detect resting/sleeping."
             );
             // Write health data
             // rootDict.SetString("NSHealthUpdateUsageDescription", "This app needs to access your health data to work properly.");

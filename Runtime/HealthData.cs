@@ -201,14 +201,14 @@ namespace NativePlugin.HealthData
                         sample.endDateInSeconds
                     );
                     SleepType type = (SleepType)sample.value;
-                    Debug.Log(
-                        "AppleOnQuerySleepSamplesCompleted: "
-                            + startDate
-                            + " - "
-                            + endDate
-                            + " - "
-                            + type
-                    );
+                    // Debug.Log(
+                    //     "AppleOnQuerySleepSamplesCompleted: "
+                    //         + startDate
+                    //         + " - "
+                    //         + endDate
+                    //         + " - "
+                    //         + type
+                    // );
                     res[i] = new SleepSample(startDate, endDate, type);
                 }
                 QuerySleepSamplesCompleted?.Invoke(res);
@@ -258,14 +258,14 @@ namespace NativePlugin.HealthData
                 {
                     AppleActivitySample sample = iOS_healthDataGetActivitySampleAtIndex(i);
                     DateTime date = HealthUtils.ConvertFromUnixTimestamp(sample.dateInSeconds);
-                    Debug.Log(
-                        "AppleOnQueryActivitySamplesCompleted: "
-                            + date
-                            + " - "
-                            + sample.standHours
-                            + " - "
-                            + sample.standHoursGoal
-                    );
+                    // Debug.Log(
+                    //     "AppleOnQueryActivitySamplesCompleted: "
+                    //         + date
+                    //         + " - "
+                    //         + sample.standHours
+                    //         + " - "
+                    //         + sample.standHoursGoal
+                    // );
                     res[i] = new ActivitySample(
                         date,
                         sample.activeEnergyBurnedInKcal,
