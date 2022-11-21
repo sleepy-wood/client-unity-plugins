@@ -10,7 +10,7 @@ build:
 
 .PHONY: build-sim
 build-sim:
-	@make -C iOS/UnityPlugin build TARGET=iphonesimulator
+	@make -C iOS/UnityPlugin build TARGET=iphoneos
 	@rm -rf $(DIST_TEST) && mkdir -p $(DIST_TEST)/iOS
 	@cp -r iOS/UnityPlugin/*.framework{,.meta} $(DIST_TEST)/iOS
 	@cp -r Editor Runtime Resources $(DIST_TEST)

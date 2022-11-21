@@ -30,7 +30,7 @@ let package = Package(
             name: "UnityPlugin",
             dependencies: ["UnityPluginStuff"],
             resources: [
-                .process("SleepDetector.mlmodelc"),
+                .copy("SleepDetector.mlmodelc"),
             ]
         ),
         .target(

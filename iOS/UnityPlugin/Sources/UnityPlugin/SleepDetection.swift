@@ -42,7 +42,7 @@ enum SleepDetection {
                 }
             }
             DispatchQueue.global().async {
-                Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+                Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
                     let startDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
                     let predicate = HKQuery.predicateForSamples(
                         withStart: startDate,
@@ -102,7 +102,9 @@ enum SleepDetection {
             prevd = currd
         }
         let accs = [acceleration.x, acceleration.y, acceleration.z]
+        print(accs, hvs, hds)
         if let model = try? SleepDetector(configuration: .init()) {
+            print("Hello")
             let input = SleepDetectorInput(
                 accs: try! MLMultiArray(accs),
                 hvs: try! MLMultiArray(hvs),
