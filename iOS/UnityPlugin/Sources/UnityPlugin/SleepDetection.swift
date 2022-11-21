@@ -19,11 +19,12 @@ enum SleepDetection {
     private static let heartRateSamples: [HKQuantityType] = []
 
     static func isAvailable() -> Bool {
-        motionManager.isAccelerometerAvailable && CMMotionActivityManager.isActivityAvailable() && HealthData.isAvailable()
+        motionManager.isAccelerometerAvailable && CMMotionActivityManager
+            .isActivityAvailable() && HealthData.isAvailable()
     }
 
     static func init() {
-        if !initialized && isAvailable() {
+        if !initialized, isAvailable() {
             motionManager.accelerometerUpdateInterval = 1.0
             motionManager.startAccelerometerUpdates(to: .main) { data, error in
                 if let error {
@@ -34,7 +35,7 @@ enum SleepDetection {
                 }
             }
             activityManager.startActivityUpdates(to: .main) { activity in
-                if let activity = activity {
+                if let activity {
                     stationary = activity.stationary
                 }
             }
@@ -54,7 +55,7 @@ enum SleepDetection {
                 predicate: predicate,
                 limit: HKObjectQueryNoLimit,
                 sortDescriptors: [sortDescriptor]
-            ) { query, samples, error in
+            ) { _, samples, error in
                 if let error {
                     print("heartRateQuery error:", error.localizedDescription)
                 }
@@ -87,7 +88,7 @@ enum SleepDetection {
         }
         hvs, hds = [], []
         prevd = Date().timeIntervalSince1970
-        for i in 0..<nwin {
+        for i in 0 ..< nwin {
             let sample = heartRateSamples[i]
             let hv = sample.quantity.doubleValue(for: HKUnit(from: "count/min"))
             let currd = sample.startDate.timeIntervalSince1970
