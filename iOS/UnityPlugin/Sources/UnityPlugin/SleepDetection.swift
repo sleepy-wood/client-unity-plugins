@@ -9,21 +9,21 @@ enum SleepStatus: Int {
     case asleep = 1
 }
 
-@available(iOS 8.0, macOS 13, *)
+@available(iOS 13.0, macOS 13, *)
 enum SleepDetection {
     private static let motionManager: CMMotionManager = .init()
     private static let activityManager: CMMotionActivityManager = .init()
-    private static let stationary: Bool = true
-    private static let initialized: Bool = false
-    private static let acceleration: CMAcceleration = .init()
-    private static let heartRateSamples: [HKQuantityType] = []
+    private static var stationary: Bool = true
+    private static var initialized: Bool = false
+    private static var acceleration: CMAcceleration = .init()
+    private static var heartRateSamples: [HKQuantitySample] = []
 
     static func isAvailable() -> Bool {
         motionManager.isAccelerometerAvailable && CMMotionActivityManager
             .isActivityAvailable() && HealthData.isAvailable()
     }
 
-    static func init() {
+    static func initialize() {
         if !initialized, isAvailable() {
             motionManager.accelerometerUpdateInterval = 1.0
             motionManager.startAccelerometerUpdates(to: .main) { data, error in
@@ -60,7 +60,7 @@ enum SleepDetection {
                     print("heartRateQuery error:", error.localizedDescription)
                 }
                 if let samples {
-                    heartRateSamples = samples
+                    heartRateSamples = samples as! [HKQuantitySample]
                 }
             }
             let timer = Timer(fire: Date(), interval: 10.0, repeats: true) { _ in
@@ -86,8 +86,9 @@ enum SleepDetection {
             print("not enough heart rate samples")
             return .unknown
         }
-        hvs, hds = [], []
-        prevd = Date().timeIntervalSince1970
+        var hvs: [Double] = []
+        var hds: [Double] = []
+        var prevd = Date().timeIntervalSince1970
         for i in 0 ..< nwin {
             let sample = heartRateSamples[i]
             let hv = sample.quantity.doubleValue(for: HKUnit(from: "count/min"))
@@ -100,13 +101,13 @@ enum SleepDetection {
         let accs = [acceleration.x, acceleration.y, acceleration.z]
         if let model = try? SleepDetector(configuration: .init()) {
             let input = SleepDetectorInput(
-                accs: accs,
-                hds: hds,
-                hvs: hvs
+                accs: try! MLMultiArray(accs),
+                hvs: try! MLMultiArray(hvs),
+                hds: try! MLMultiArray(hds)
             )
             if let output = try? model.prediction(input: input) {
                 print(output)
-                return output.out_[0] > 0 ? .asleep : .awake
+                return output.out_[0] as! Double > 0 ? .asleep : .awake
             }
         }
         return .unknown
