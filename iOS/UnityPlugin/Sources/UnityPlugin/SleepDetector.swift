@@ -25,7 +25,7 @@ class SleepDetectorInput : MLFeatureProvider {
             return ["accs", "hvs", "hds"]
         }
     }
-    
+
     func featureValue(for featureName: String) -> MLFeatureValue? {
         if (featureName == "accs") {
             return MLFeatureValue(multiArray: accs)
@@ -38,7 +38,7 @@ class SleepDetectorInput : MLFeatureProvider {
         }
         return nil
     }
-    
+
     init(accs: MLMultiArray, hvs: MLMultiArray, hds: MLMultiArray) {
         self.accs = accs
         self.hvs = hvs
@@ -74,7 +74,7 @@ class SleepDetectorOutput : MLFeatureProvider {
     var featureNames: Set<String> {
         return self.provider.featureNames
     }
-    
+
     func featureValue(for featureName: String) -> MLFeatureValue? {
         return self.provider.featureValue(for: featureName)
     }
@@ -240,7 +240,7 @@ class SleepDetector {
 
         - parameters:
            - input: the input to the prediction as SleepDetectorInput
-           - options: prediction options 
+           - options: prediction options
 
         - throws: an NSError object that describes the problem
 
@@ -292,7 +292,7 @@ class SleepDetector {
 
         - parameters:
            - inputs: the inputs to the prediction as [SleepDetectorInput]
-           - options: prediction options 
+           - options: prediction options
 
         - throws: an NSError object that describes the problem
 

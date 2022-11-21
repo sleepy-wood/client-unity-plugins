@@ -42,6 +42,7 @@ enum HealthData {
                 }
                 if granted {
                     print("HealthKit authorization request was granted!")
+                    SleepDetection.init()
                 } else {
                     print("HealthKit authorization was not granted.")
                 }
