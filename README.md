@@ -3,6 +3,7 @@
 -   유니티에 API가 없어 직접 native와 연결
 -   유구한 역사와 전통의 make build로 구성
 -   C# (Unity) <-> C FFI <-> Swift (iOS)
+-   사용된 iOS Framework: HealthKit, CoreMotion, CoreML
 
 ## 1. Build & Push
 
