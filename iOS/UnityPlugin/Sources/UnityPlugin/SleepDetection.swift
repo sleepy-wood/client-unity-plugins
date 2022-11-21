@@ -3,12 +3,13 @@ import CoreMotion
 import Foundation
 import HealthKit
 
-enum SleepStatus {
+enum SleepStatus: Int {
     case unknown = -1
     case awake = 0
     case asleep = 1
 }
 
+@available(iOS 8.0, macOS 13, *)
 enum SleepDetection {
     private static let motionManager: CMMotionManager = .init()
     private static let activityManager: CMMotionActivityManager = .init()
@@ -18,11 +19,11 @@ enum SleepDetection {
     private static let heartRateSamples: [HKQuantityType] = []
 
     static func isAvailable() -> Bool {
-        motionManager.isAccelerometerAvailable && CMMotionActivityManager.isActivityAvailable()
+        motionManager.isAccelerometerAvailable && CMMotionActivityManager.isActivityAvailable() && HealthData.isAvailable()
     }
 
     static func init() {
-        if !initialized && isAvailable() && HealthData.isAvailable() {
+        if !initialized && isAvailable() {
             motionManager.accelerometerUpdateInterval = 1.0
             motionManager.startAccelerometerUpdates(to: .main) { data, error in
                 if let error {
@@ -71,7 +72,7 @@ enum SleepDetection {
         }
     }
 
-    static func detectSleepStatus() -> SleepStatus {
+    static func detectSleep() -> SleepStatus {
         if !initialized {
             print("SleepDetection not initialized")
             return .unknown
@@ -81,6 +82,7 @@ enum SleepDetection {
         }
         let nwin = 5
         if heartRateSamples.count < nwin {
+            print("not enough heart rate samples")
             return .unknown
         }
         hvs, hds = [], []
@@ -94,17 +96,18 @@ enum SleepDetection {
             hds.append(hd)
             prevd = currd
         }
-        accs = [acceleration.x, acceleration.y, acceleration.z]
-        let heartRate = heartRateSamples.first?.quantity.doubleValue(for: HKUnit(from: "count/min"))
-        let model = SleepDetectionModel()
-        let input = SleepDetectionModelInput(
-            acceleration_x: acceleration.x,
-            acceleration_y: acceleration.y,
-            acceleration_z: acceleration.z,
-            heart_rate: heartRate
-        )
-        let output = try? model.prediction(input: input)
-        print(output)
-        return output?.classLabel == "asleep" ? .asleep : .awake
+        let accs = [acceleration.x, acceleration.y, acceleration.z]
+        if let model = try? SleepDetector(configuration: .init()) {
+            let input = SleepDetectorInput(
+                accs: accs,
+                hds: hds,
+                hvs: hvs
+            )
+            if let output = try? model.prediction(input: input) {
+                print(output)
+                return output.out_[0] > 0 ? .asleep : .awake
+            }
+        }
+        return .unknown
     }
 }
