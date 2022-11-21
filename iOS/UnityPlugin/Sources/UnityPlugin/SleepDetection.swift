@@ -42,7 +42,7 @@ enum SleepDetection {
                 }
             }
             DispatchQueue.global().async {
-                Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+                let timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
                     let startDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
                     let predicate = HKQuery.predicateForSamples(
                         withStart: startDate,
@@ -69,6 +69,7 @@ enum SleepDetection {
                     HealthData.healthStore.execute(query)
                     print("heartRateQuery executed")
                 }
+                timer.fire()
                 RunLoop.current.run()
             }
             initialized = true
@@ -102,19 +103,29 @@ enum SleepDetection {
             prevd = currd
         }
         let accs = [acceleration.x, acceleration.y, acceleration.z]
-        print(accs, hvs, hds)
-        if let model = try? SleepDetector(configuration: .init()) {
-            print("Hello")
-            let input = SleepDetectorInput(
-                accs: try! MLMultiArray(accs),
-                hvs: try! MLMultiArray(hvs),
-                hds: try! MLMultiArray(hds)
-            )
-            if let output = try? model.prediction(input: input) {
-                print(output)
-                return output.out_[0] as! Double > 0 ? .asleep : .awake
+        print("SleepDetector input:", "accs", accs, "hvs", hvs, "hds", hds)
+        do {
+            let accsArray = try MLMultiArray(shape: [1, 3] as [NSNumber], dataType: .double)
+            let hvsArray = try MLMultiArray(shape: [1, nwin] as [NSNumber], dataType: .double)
+            let hdsArray = try MLMultiArray(shape: [1, nwin] as [NSNumber], dataType: .double)
+            for i in 0 ..< 3 {
+                accsArray[[0, i] as [NSNumber]] = NSNumber(value: accs[i])
             }
+            for i in 0 ..< nwin {
+                hvsArray[[0, i] as [NSNumber]] = NSNumber(value: hvs[i])
+                hdsArray[[0, i] as [NSNumber]] = NSNumber(value: hds[i])
+            }
+            let input = SleepDetectorInput(
+                accs: accsArray,
+                hvs: hvsArray,
+                hds: hdsArray
+            )
+            let output = try SleepDetector(configuration: .init()).prediction(input: input)
+            print("SleepDetector output:", output.out_[0] as! Double)
+            return output.out_[0] as! Double > 0 ? .asleep : .awake
+        } catch {
+            print("SleepDetector error:", error.localizedDescription)
+            return .unknown
         }
-        return .unknown
     }
 }
