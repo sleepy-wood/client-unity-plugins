@@ -84,11 +84,11 @@ enum SleepDetection {
             print("SleepDetection not initialized")
             return SleepDetectionResult(
                 isStationary: stationary,
-                accelerationMagnitude: 0.0,
-                heartRateStandardDeviation: 0.0,
-                heartRateAverage: 0.0,
-                heartRateIntervalStandardDeviation: 0.0,
-                heartRateIntervalAverage: 0.0,
+                accelerationMagnitudeInG: 0.0,
+                heartRateStandardDeviationInBpm: 0.0,
+                heartRateAverageInBpm: 0.0,
+                heartRateIntervalStandardDeviationInSeconds: 0.0,
+                heartRateIntervalAverageInSeconds: 0.0,
                 networkOutput: 0.0,
                 sleepState: SleepState.unknown.rawValue
             )
@@ -157,7 +157,7 @@ enum SleepDetection {
             let output = try SleepDetector(configuration: .init()).prediction(input: input)
             let out = output.out_[0] as! Double
             print("SleepDetector output:", out)
-            let res = out > 0 ? .asleep : .awake
+            let res: SleepState = out > 0 ? .asleep : .awake
             return SleepDetectionResult(
                 isStationary: stationary,
                 accelerationMagnitudeInG: accm,

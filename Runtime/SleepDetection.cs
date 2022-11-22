@@ -67,7 +67,7 @@ namespace NativePlugin.SleepDetection
 #endif
         }
 
-        public static SleepStatus DetectSleep()
+        public static SleepDetectionResult DetectSleep()
         {
 #if UNITY_IOS
             AppleSleepDetectionResult result = iOS_sleepDetectionDetectSleep();
