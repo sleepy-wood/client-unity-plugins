@@ -47,8 +47,24 @@ public class NativePluginTest : MonoBehaviour
     {
         if (SleepDetection.IsAvailable())
         {
-            SleepStatus status = SleepDetection.DetectSleep();
-            Debug.Log("SleepStatus: " + status.ToString());
+            SleepDetectionResult result = SleepDetection.DetectSleep();
+            Debug.Log("IsStationary: " + result.IsStationary.ToString());
+            Debug.Log("AccelerationMagnitudeInG: " + result.AccelerationMagnitudeInG.ToString());
+            Debug.Log(
+                "HeartRateStandardDeviationInBpm: "
+                    + result.HeartRateStandardDeviationInBpm.ToString()
+            );
+            Debug.Log("HeartRateAverageInBpm: " + result.HeartRateAverageInBpm.ToString());
+            Debug.Log(
+                "HeartRateIntervalStandardDeviationInSeconds: "
+                    + result.HeartRateIntervalStandardDeviationInSeconds.ToString()
+            );
+            Debug.Log(
+                "HeartRateIntervalAverageInSeconds: "
+                    + result.HeartRateIntervalAverageInSeconds.ToString()
+            );
+            Debug.Log("NetworkOutput: " + result.NetworkOutput.ToString());
+            Debug.Log("SleepState: " + result.SleepState.ToString());
         }
     }
 

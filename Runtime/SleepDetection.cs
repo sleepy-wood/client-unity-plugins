@@ -2,14 +2,49 @@ using System;
 using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
+using NativePlugin.SleepDetection.IOS;
 
 namespace NativePlugin.SleepDetection
 {
-    public enum SleepStatus : int
+    public enum SleepState : int
     {
         Unknown = -1,
         Awake = 0,
         Asleep = 1,
+    }
+
+    public struct SleepDetectionResult
+    {
+        public readonly bool IsStationary;
+        public readonly double AccelerationMagnitudeInG;
+        public readonly double HeartRateStandardDeviationInBpm;
+        public readonly double HeartRateAverageInBpm;
+        public readonly double HeartRateIntervalStandardDeviationInSeconds;
+        public readonly double HeartRateIntervalAverageInSeconds;
+        public readonly double NetworkOutput;
+        public readonly SleepState SleepState;
+
+        public SleepDetectionResult(
+            bool isStationary,
+            double accelerationMagnitudeInG,
+            double heartRateStandardDeviationInBpm,
+            double heartRateAverageInBpm,
+            double heartRateIntervalStandardDeviationInSeconds,
+            double heartRateIntervalAverageInSeconds,
+            double networkOutput,
+            SleepState sleepState
+        )
+        {
+            IsStationary = isStationary;
+            AccelerationMagnitudeInG = accelerationMagnitudeInG;
+            HeartRateStandardDeviationInBpm = heartRateStandardDeviationInBpm;
+            HeartRateAverageInBpm = heartRateAverageInBpm;
+            HeartRateIntervalStandardDeviationInSeconds =
+                heartRateIntervalStandardDeviationInSeconds;
+            HeartRateIntervalAverageInSeconds = heartRateIntervalAverageInSeconds;
+            NetworkOutput = networkOutput;
+            SleepState = sleepState;
+        }
     }
 
     public static class SleepDetection
@@ -19,7 +54,7 @@ namespace NativePlugin.SleepDetection
         private static extern bool iOS_sleepDetectionIsAvailable();
 
         [DllImport("__Internal")]
-        private static extern int iOS_sleepDetectionDetectSleep();
+        private static extern AppleSleepDetectionResult iOS_sleepDetectionDetectSleep();
 #endif
 
         public static bool IsAvailable()
@@ -35,10 +70,20 @@ namespace NativePlugin.SleepDetection
         public static SleepStatus DetectSleep()
         {
 #if UNITY_IOS
-            return (SleepStatus)iOS_sleepDetectionDetectSleep();
+            AppleSleepDetectionResult result = iOS_sleepDetectionDetectSleep();
+            return new SleepDetectionResult(
+                result.isStationary,
+                result.accelerationMagnitudeInG,
+                result.heartRateStandardDeviationInBpm,
+                result.heartRateAverageInBpm,
+                result.heartRateIntervalStandardDeviationInSeconds,
+                result.heartRateIntervalAverageInSeconds,
+                result.networkOutput,
+                (SleepState)result.sleepState
+            );
 #else
             Debug.Log("SleepDetection.DetectSleep: Unsupported Platform");
-            return SleepStatus.Awake;
+            return new SleepDetectionResult(false, 0, 0, 0, 0, 0, 0, SleepState.Awake);
 #endif
         }
     }
