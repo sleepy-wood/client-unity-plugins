@@ -3,7 +3,8 @@
 -   유니티에 API가 없어 직접 native와 연결
 -   유구한 역사와 전통의 make build로 구성
 -   C# (Unity) <-> C FFI <-> Swift (iOS)
--   사용된 iOS Framework: HealthKit, CoreMotion, CoreML
+-   HealthKit -> Health Data
+-   HealthKit + CoreMotion + CoreML -> Sleep Detection
 
 ## 1. Build & Push
 
@@ -38,15 +39,15 @@ using NativePlugin.HealthData;
 
 #### Events
 
--   `event RequestAuthCompletedHandler RequestAuthCompleted`
--   `event QuerySleepSamplesCompletedHandler QuerySleepSamplesCompleted`
--   `event QueryActivitySamplesCompletedHandler QueryActivitySamplesCompleted`
+-   `event RequestAuthCompletedHandler HealthData.RequestAuthCompleted`
+-   `event QuerySleepSamplesCompletedHandler HealthData.QuerySleepSamplesCompleted`
+-   `event QueryActivitySamplesCompletedHandler HealthData.QueryActivitySamplesCompleted`
 
 #### Delegates
 
 -   `delegate void RequestAuthCompletedHandler(bool granted)`
--   `delegate void QuerySleepSamplesCompletedHandler(SleepSample[] samples)`
--   `delegate void QueryActivitySamplesCompletedHandler(ActivitySample[] samples)`
+-   `delegate void QuerySleepSamplesCompletedHandler(`[`SleepSample`](Runtime/HealthData.cs#L21)`[] samples)`
+-   `delegate void QueryActivitySamplesCompletedHandler(`[`ActivitySample`](Runtime/HealthData.cs#L35)`[] samples)`
 
 ### SleepDetection
 
@@ -57,4 +58,4 @@ using NativePlugin.SleepDetection;
 #### Functions
 
 -   `bool SleepDetection.IsAvailable()`
--   `SleepStatus SleepDetection.DetectSleep()`
+-   [`SleepDetectionResult`](Runtime/SleepDetection.cs#L16)` SleepDetection.DetectSleep()`
