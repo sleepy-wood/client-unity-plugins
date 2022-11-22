@@ -1,3 +1,6 @@
+#ifndef SleepDetection_h
+#define SleepDetection_h
+
 typedef struct {
     _Bool isStationary;
     double accelerationMagnitudeInG;
@@ -8,3 +11,5 @@ typedef struct {
     double networkOutput;
     int sleepState;
 } SleepDetectionResult;
+
+#endif
