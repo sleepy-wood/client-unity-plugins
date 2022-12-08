@@ -1,4 +1,6 @@
-# Unity - Smart Watch & Health Care Integration
+# client-unity-plugins
+
+## Unity - Smart Watch & Health Care Integration
 
 -   유니티에 API가 없어 직접 native와 연결
 -   유구한 역사와 전통의 make build로 구성
